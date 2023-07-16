@@ -1,8 +1,5 @@
 package io.management.ua.configuration;
 
-import io.management.ua.amqp.KafkaValueDeserializer;
-import io.management.ua.amqp.KafkaValueSerializer;
-import io.management.ua.amqp.models.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -25,18 +22,18 @@ public class ApplicationKafkaConfiguration {
     private String bootstrapServers;
 
     @Bean
-    public ProducerFactory<String, Message> producerFactory() {
+    public ProducerFactory<String, String> producerFactory() {
         return new DefaultKafkaProducerFactory<>(
                 Map.of(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                         RETRIES_CONFIG, 0,
                         BUFFER_MEMORY_CONFIG, 33554432,
                         KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
-                        VALUE_SERIALIZER_CLASS_CONFIG, KafkaValueSerializer.class
+                        VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class
                 ));
     }
 
     @Bean
-    public KafkaTemplate<String, Message> kafkaTemplate() {
+    public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
@@ -44,6 +41,6 @@ public class ApplicationKafkaConfiguration {
     public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaValueDeserializer.class));
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class));
     }
 }
