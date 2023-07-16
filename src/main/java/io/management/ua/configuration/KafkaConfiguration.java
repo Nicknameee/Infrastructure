@@ -2,6 +2,7 @@ package io.management.ua.configuration;
 
 import io.management.ua.amqp.KafkaValueDeserializer;
 import io.management.ua.amqp.KafkaValueSerializer;
+import io.management.ua.amqp.models.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -24,7 +25,7 @@ public class KafkaConfiguration {
     private String[] bootstrapServers;
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, Message> producerFactory() {
         return new DefaultKafkaProducerFactory<>(
                 Map.of(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                         RETRIES_CONFIG, 0,
@@ -35,7 +36,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, Message> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
