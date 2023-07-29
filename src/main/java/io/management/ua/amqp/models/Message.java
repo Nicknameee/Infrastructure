@@ -1,4 +1,4 @@
-package io.management.ua.amqp;
+package io.management.ua.amqp.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
