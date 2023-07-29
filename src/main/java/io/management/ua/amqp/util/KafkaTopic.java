@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum KafkaTopic {
-    AUTHENTICATION("authentication");
-
-    private final String topic;
+public class KafkaTopic {
+    public static String AUTHENTICATION = "authentication";
 }
