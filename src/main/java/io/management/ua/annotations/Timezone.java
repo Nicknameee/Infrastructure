@@ -1,8 +1,7 @@
 package io.management.ua.annotations;
 
 
-import jakarta.validation.Constraint;
-
+import javax.validation.Constraint;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

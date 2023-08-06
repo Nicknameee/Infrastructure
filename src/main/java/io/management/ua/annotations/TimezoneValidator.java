@@ -1,14 +1,12 @@
 package io.management.ua.annotations;
 
-
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.TimeZone;
 
 public class TimezoneValidator implements ConstraintValidator<Timezone, String> {
-  @Override
+    @Override
     public void initialize(Timezone constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
