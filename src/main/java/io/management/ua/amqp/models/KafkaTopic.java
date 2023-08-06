@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class KafkaTopic {
-    public static final String USER_APPROVAL_TOPIC = "USER_APPROVAL_TOPIC";
+    public static final String CERTIFICATION_TOPIC = "certification";
 }
