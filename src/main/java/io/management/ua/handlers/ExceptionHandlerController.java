@@ -14,6 +14,7 @@ public class ExceptionHandlerController {
         if (e instanceof GlobalException exception) {
             return ResponseEntity.status(exception.getHttpStatus()).body(exception);
         }
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

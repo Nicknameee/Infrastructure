@@ -28,7 +28,8 @@ public class GlobalException extends Exception {
     static class GlobalExceptionSerializer extends JsonSerializer<GlobalException> {
 
         @Override
-        public void serialize(GlobalException e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        public void serialize(GlobalException e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+                throws IOException {
             ObjectNode objectNode = new ObjectMapper().createObjectNode();
             objectNode.put("httpStatus", e.getHttpStatus().name());
             objectNode.put("exceptionTime", e.getExceptionTime().toString());
