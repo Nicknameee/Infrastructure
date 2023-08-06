@@ -26,12 +26,12 @@ import java.util.function.Function;
 @PropertySource("classpath:token.properties")
 public class AuthorizationTokenUtility {
     private final Map<String, Set<String>> blacklistedTokens = new HashMap<>();
-    @Value("${token.duration}")
+    @Value("${token.duration:3600}")
     private int tokenValidityDuration;
     @Value("${token.secret}")
     private String tokenSecret;
 
-    @Scheduled(initialDelayString = "${token.duration}", fixedRateString = "${token.duration}", timeUnit = TimeUnit.SECONDS)
+    @Scheduled(initialDelayString = "${token.duration:3600}", fixedRateString = "${token.duration:3600}", timeUnit = TimeUnit.SECONDS)
     public void clearTokens() {
         for (Map.Entry<String, Set<String>> entry : blacklistedTokens.entrySet()) {
             Set<String> validTokens = new HashSet<>();
