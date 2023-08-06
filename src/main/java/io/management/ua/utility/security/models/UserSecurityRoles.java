@@ -1,4 +1,4 @@
-package io.management.ua.utility;
+package io.management.ua.utility.security.models;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
