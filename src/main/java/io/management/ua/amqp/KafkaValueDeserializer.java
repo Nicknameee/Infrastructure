@@ -2,7 +2,7 @@ package io.management.ua.amqp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.management.ua.amqp.models.Message;
-import io.management.ua.amqp.util.UtilManager;
+import io.management.ua.utility.UtilManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;

@@ -1,4 +1,4 @@
-package io.management.ua.amqp.util;
+package io.management.ua.utility;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
