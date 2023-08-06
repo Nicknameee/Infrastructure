@@ -8,4 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class KafkaTopic {
     public static final String AUTHENTICATION = "authentication";
     public static final String USER = "user";
+    public static final String ORDER = "order";
+    public static final String PAYMENT = "payment";
+    public static final String API = "api";
 }

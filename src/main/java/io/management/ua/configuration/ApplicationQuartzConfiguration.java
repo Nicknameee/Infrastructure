@@ -5,6 +5,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.reflections.Reflections;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import javax.annotation.PostConstruct;
@@ -14,13 +15,14 @@ import java.util.Set;
 
 @Slf4j
 @Configuration
+@EnableScheduling
 public class ApplicationQuartzConfiguration {
     private Scheduler scheduler;
 
     @PostConstruct
     protected void initializeQuartzJobs() {
         try {
-            Reflections reflections = new Reflections("io.management.ua.schedule");
+            Reflections reflections = new Reflections("io.management.ua.triggers");
             scheduler = new StdSchedulerFactory().getScheduler();
             scheduler.start();
             Set<Class<? extends QuartzJobBean>> quartzJobClasses = reflections.getSubTypesOf(QuartzJobBean.class);
