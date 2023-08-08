@@ -54,7 +54,7 @@ public class ApplicationSecurityConfiguration {
         http
                 .authorizeRequests()
                 .antMatchers("/stomp/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
+                .antMatchers(HttpMethod.POST, "/login", "/logout", "/util/**", "**/allow/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
