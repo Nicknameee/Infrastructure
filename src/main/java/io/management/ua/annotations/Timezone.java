@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = TimezoneValidator.class)
 public @interface Timezone  {
     String message() default "Timezone is invalid";
+    Class<?>[] groups() default {};
 }
