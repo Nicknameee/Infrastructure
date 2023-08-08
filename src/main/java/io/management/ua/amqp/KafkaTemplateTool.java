@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class KafkaTemplateTool<T, Y> {
     private final KafkaTemplate<T, Message<Y>> kafkaTemplate;
 
-    public void produce(String topic, Y message) {
+    public void send(String topic, Y message) {
         kafkaTemplate.send(topic, new Message<>(message));
     }
 }
