@@ -17,7 +17,7 @@ public class KafkaValueSerializer implements Serializer<Message<?>> {
     }
 
     @Override
-    public byte[] serialize(String s, Message message) {
+    public byte[] serialize(String s, Message<?> message) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
@@ -29,7 +29,7 @@ public class KafkaValueSerializer implements Serializer<Message<?>> {
     }
 
     @Override
-    public byte[] serialize(String topic, Headers headers, Message message) {
+    public byte[] serialize(String topic, Headers headers, Message<?> message) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
