@@ -25,7 +25,7 @@ public class ApplicationKafkaConfiguration {
     private String bootstrapServers;
 
     @Bean
-    public ProducerFactory<String, Message<?>> producerFactory() {
+    public ProducerFactory<String, Message> producerFactory() {
         return new DefaultKafkaProducerFactory<>(
                 Map.of(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                         RETRIES_CONFIG, 0,
@@ -36,12 +36,12 @@ public class ApplicationKafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, Message<?>> kafkaTemplate() {
+    public KafkaTemplate<String, Message> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
     @Bean
-    public ConsumerFactory<String, Message<?>> consumerFactory() {
+    public ConsumerFactory<String, Message> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaValueDeserializer.class));
