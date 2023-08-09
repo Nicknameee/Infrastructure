@@ -11,13 +11,13 @@ import org.apache.kafka.common.serialization.Deserializer;
 import java.util.Map;
 
 @Slf4j
-public class KafkaValueDeserializer<T> implements Deserializer<Message<T>> {
+public class KafkaValueDeserializer implements Deserializer<Message<?>> {
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
     }
 
     @Override
-    public Message<T> deserialize(String topic, byte[] bytes) {
+    public Message<?> deserialize(String topic, byte[] bytes) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
@@ -32,7 +32,7 @@ public class KafkaValueDeserializer<T> implements Deserializer<Message<T>> {
     }
 
     @Override
-    public Message<T> deserialize(String topic, Headers headers, byte[] bytes) {
+    public Message<?> deserialize(String topic, Headers headers, byte[] bytes) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {

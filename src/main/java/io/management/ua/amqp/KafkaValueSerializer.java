@@ -11,13 +11,13 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 @Slf4j
-public class KafkaValueSerializer<T> implements Serializer<Message<T>> {
+public class KafkaValueSerializer implements Serializer<Message<?>> {
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
     }
 
     @Override
-    public byte[] serialize(String s, Message<T> message) {
+    public byte[] serialize(String s, Message<?> message) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
@@ -29,7 +29,7 @@ public class KafkaValueSerializer<T> implements Serializer<Message<T>> {
     }
 
     @Override
-    public byte[] serialize(String topic, Headers headers, Message<T> message) {
+    public byte[] serialize(String topic, Headers headers, Message<?> message) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
