@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaTemplateTool<T> {
-    private final KafkaTemplate<String, Message<?>> kafkaTemplate;
+    private final KafkaTemplate<String, Message<T>> kafkaTemplate;
 
     public void send(String topic, T message) {
         kafkaTemplate.send(topic, new Message<>(message));
