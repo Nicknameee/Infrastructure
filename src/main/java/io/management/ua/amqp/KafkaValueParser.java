@@ -5,9 +5,13 @@ import io.management.ua.amqp.models.Message;
 import io.management.ua.utility.UtilManager;
 
 public class KafkaValueParser {
-    public static Object parseObject(Message message) throws JsonProcessingException, ClassNotFoundException {
-        Class<?> jsonClass = Class.forName(message.getImplementation());
+    public static Object parseObject(Message message) {
+        try {
+            Class<?> jsonClass = Class.forName(message.getImplementation());
 
-        return UtilManager.objectMapper().readValue(message.getJson(), jsonClass);
+            return UtilManager.objectMapper().readValue(message.getJson(), jsonClass);
+        } catch (ClassNotFoundException | JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
