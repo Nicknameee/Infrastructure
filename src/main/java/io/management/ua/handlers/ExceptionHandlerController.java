@@ -15,6 +15,6 @@ public class ExceptionHandlerController {
             return ResponseEntity.status(exception.getHttpStatus()).body(exception);
         }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
     }
 }
