@@ -11,17 +11,17 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 @Slf4j
-public class KafkaValueSerializer implements Serializer<Message<?>> {
+public class KafkaValueSerializer implements Serializer<Message> {
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
     }
 
     @Override
-    public byte[] serialize(String s, Message<?> message) {
+    public byte[] serialize(String s, Message message) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
-            return objectMapper.writeValueAsBytes(message);
+            return objectMapper.writeValueAsBytes(message.getJson());
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new SerializationException(String.format("Could not serialize message: %s", message));
@@ -29,7 +29,7 @@ public class KafkaValueSerializer implements Serializer<Message<?>> {
     }
 
     @Override
-    public byte[] serialize(String topic, Headers headers, Message<?> message) {
+    public byte[] serialize(String topic, Headers headers, Message message) {
         ObjectMapper objectMapper = UtilManager.objectMapper();
 
         try {
