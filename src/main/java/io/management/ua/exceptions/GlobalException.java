@@ -13,7 +13,7 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Builder
 @Getter
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @JsonSerialize(using = GlobalException.GlobalExceptionSerializer.class)
 public class GlobalException extends Exception {
     private HttpStatus httpStatus;
-    private LocalDateTime exceptionTime;
+    private ZonedDateTime exceptionTime;
     private String exception;
 
     static class GlobalExceptionSerializer extends JsonSerializer<GlobalException> {
