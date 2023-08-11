@@ -31,14 +31,17 @@ public class AuthenticationLogoutTokenBasedSecurityHandler implements LogoutSucc
                                 Authentication authentication) throws IOException {
         if (request.getRequestURI().equals("/logout")) {
             String authorizationHeaderValue = request.getHeader("Authorization");
+
             if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer ")) {
                 String authorizationToken = authorizationHeaderValue.substring(7);
                 String username = authorizationTokenUtility.getUsernameFromToken(authorizationToken);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                 if (!authorizationToken.isEmpty()
                         && authorizationTokenUtility.validateToken(authorizationToken, userDetails, request)) {
                     authorizationTokenUtility.blacklistToken(authorizationToken);
                     ObjectMapper jacksonMapper = new ObjectMapper();
+
                     Map<String, Object> responseBodyMap = new HashMap<>();
                     responseBodyMap.put("logout", true);
                     response.setContentType("application/json");

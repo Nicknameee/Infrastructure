@@ -13,32 +13,41 @@ import javax.annotation.PreDestroy;
 import java.lang.reflect.Field;
 import java.util.Set;
 
-@Slf4j
 @Configuration
 @EnableScheduling
+@Slf4j
 public class ApplicationQuartzConfiguration {
     private Scheduler scheduler;
 
     @PostConstruct
+    @Deprecated
     protected void initializeQuartzJobs() {
         try {
             Reflections reflections = new Reflections("io.management.ua.triggers");
+
             scheduler = new StdSchedulerFactory().getScheduler();
             scheduler.start();
+
             Set<Class<? extends QuartzJobBean>> quartzJobClasses = reflections.getSubTypesOf(QuartzJobBean.class);
+
             for (Class<? extends QuartzJobBean> quartzJobClass : quartzJobClasses) {
                 try {
                     log.info("Initializing QuartzJob '{}'", quartzJobClass);
+
                     Field cronExpressionField = quartzJobClass.getDeclaredField("cronExpression");
                     cronExpressionField.setAccessible(true);
+
                     String cron = (String) cronExpressionField.get("");
                     cronExpressionField.setAccessible(false);
+
                     JobDetail quartzJobDetail = JobBuilder.newJob(quartzJobClass)
                             .withIdentity(quartzJobClass.getName()).storeDurably().build();
+
                     Trigger quartzJobTrigger = TriggerBuilder.newTrigger().forJob(quartzJobDetail)
                             .withIdentity(String.format("Trigger for %s", quartzJobClass.getName()))
                             .withSchedule(CronScheduleBuilder.cronSchedule(cron))
                             .build();
+
                     scheduler.scheduleJob(quartzJobDetail, quartzJobTrigger);
                 } catch (SchedulerException | NoSuchFieldException e) {
                     log.error(e.getMessage(), e);
@@ -50,6 +59,7 @@ public class ApplicationQuartzConfiguration {
     }
 
     @PreDestroy
+    @Deprecated
     protected void destroyQuartzScheduledJobs() {
         try {
             scheduler.shutdown();

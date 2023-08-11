@@ -33,10 +33,12 @@ public class PreLogoutTokenBasedFilter extends GenericFilterBean {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         if (request.getRequestURI().equals("/logout")) {
             String authorizationHeaderValue = request.getHeader("Authorization");
+
             if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer ")) {
                 String authorizationToken = authorizationHeaderValue.substring(7);
                 String username = authorizationTokenUtility.getUsernameFromToken(authorizationToken);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                 if (authorizationToken.isEmpty() || !authorizationTokenUtility.validateToken(authorizationToken, userDetails, request)) {
                     processNonAuthenticatedExceptionResponse((HttpServletResponse) servletResponse);
                 }
@@ -44,6 +46,7 @@ public class PreLogoutTokenBasedFilter extends GenericFilterBean {
                 processNonAuthenticatedExceptionResponse((HttpServletResponse) servletResponse);
             }
         }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
