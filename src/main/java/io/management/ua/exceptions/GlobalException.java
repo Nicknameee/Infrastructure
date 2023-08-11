@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 @Setter
 @AllArgsConstructor
 @JsonSerialize(using = GlobalException.GlobalExceptionSerializer.class)
-public class GlobalException extends Exception {
+public class GlobalException extends RuntimeException {
     private HttpStatus httpStatus;
     private ZonedDateTime exceptionTime;
     private String exception;
