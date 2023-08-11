@@ -18,6 +18,14 @@
                     <target>19</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <outputDirectory>${project.basedir}/src/main/java/io/management/ua</outputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
