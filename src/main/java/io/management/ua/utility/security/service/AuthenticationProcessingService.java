@@ -36,7 +36,7 @@ public class AuthenticationProcessingService {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             token = authorizationTokenUtility.generateToken(userDetails, request);
         } else {
-            throw new AuthenticationException(HttpStatus.NOT_ACCEPTABLE, TimeUtil.getCurrentTime(), "Could not authenticate following credentials");
+            throw new AuthenticationException(HttpStatus.NOT_ACCEPTABLE, TimeUtil.getCurrentDateTime(), "Could not authenticate following credentials");
         }
 
         Map<String, Object> response = new HashMap<>();
