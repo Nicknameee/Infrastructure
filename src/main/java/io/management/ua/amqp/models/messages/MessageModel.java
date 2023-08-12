@@ -13,5 +13,6 @@ public class MessageModel {
     private String sender;
     private String receiver;
     private String content;
+    private String subject;
     private ZonedDateTime sendingDate;
 }
