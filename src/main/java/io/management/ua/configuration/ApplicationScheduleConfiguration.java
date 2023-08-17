@@ -7,6 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @EnableScheduling
 @Slf4j
-public class ApplicationQuartzConfiguration {
+public class ApplicationScheduleConfiguration {
 
 }
