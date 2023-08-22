@@ -2,7 +2,6 @@ package io.management.ua.utility.security.service;
 
 import io.management.ua.exceptions.AuthenticationException;
 import io.management.ua.utility.AuthorizationTokenUtility;
-import io.management.ua.utility.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,7 +35,7 @@ public class AuthenticationProcessingService {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             token = authorizationTokenUtility.generateToken(userDetails, request);
         } else {
-            throw new AuthenticationException(HttpStatus.NOT_ACCEPTABLE, TimeUtil.getCurrentDateTime(), "Could not authenticate following credentials");
+            throw new AuthenticationException(HttpStatus.NOT_ACCEPTABLE, "Could not authenticate following credentials");
         }
 
         Map<String, Object> response = new HashMap<>();
