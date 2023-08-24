@@ -17,20 +17,17 @@ public class Response<T> {
         this.data = data;
     }
 
+    public static Response<?> ok() {
+        return new Response<>();
+    }
     public static Response<?> ok(Object data) {
-        if (instance == null) {
-            instance = new Response<>(data);
-            instance.setHttpStatus(HttpStatus.OK);
-        } else {
-            Object existingData = instance.getData();
-            instance = new Response<>(existingData);
-            instance.setHttpStatus(HttpStatus.OK);
-        }
+        Response<?> instance = new Response<>(data);
+        instance.setHttpStatus(HttpStatus.OK);
 
         return instance;
     }
 
-    public static Response<?> of(HttpStatus httpStatus) {
+    public static void of(HttpStatus httpStatus) {
         if (instance == null) {
             instance = new Response<>();
             instance.setHttpStatus(httpStatus);
@@ -40,10 +37,9 @@ public class Response<T> {
             instance.setHttpStatus(httpStatus);
         }
 
-        return instance;
     }
 
-    public static Response<?> data(Object data) {
+    public static void data(Object data) {
         if (instance == null) {
             instance = new Response<>(data);
         } else {
@@ -51,7 +47,12 @@ public class Response<T> {
             instance = new Response<>(data);
             instance.setHttpStatus(existingStatus);
         }
+    }
 
-        return instance;
+    public static Response<?> build() {
+        Response<?> response = instance;
+        instance = null;
+
+        return response;
     }
 }
