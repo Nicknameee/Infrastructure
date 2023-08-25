@@ -1,4 +1,6 @@
-package io.management.ua.annotations;
+package io.management.ua.annotations.processors;
+
+import io.management.ua.annotations.Timezone;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

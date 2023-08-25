@@ -8,8 +8,8 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @Builder
 public class Pagination {
-    private int pageNumber;
-    private int pageSize;
+    private Integer pageNumber;
+    private Integer pageSize;
     private String sortBy;
     private Sort.Direction direction;
 }
