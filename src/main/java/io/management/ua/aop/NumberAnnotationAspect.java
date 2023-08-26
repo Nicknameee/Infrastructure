@@ -29,7 +29,7 @@ public class NumberAnnotationAspect {
 
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof DefaultNumberValue) {
-                        double value = ((DefaultNumberValue) annotation).defaultV();
+                        double value = ((DefaultNumberValue) annotation).v();
 
                         switch (method.getParameters()[paramIndex].getType().getName()) {
                             case "java.lang.Long" -> args[paramIndex] = (long) value;

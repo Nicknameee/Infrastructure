@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER, ElementType.TYPE_PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DefaultNumberValue {
-    double defaultV() default 0D;
+    double value() default 0D;
 }
