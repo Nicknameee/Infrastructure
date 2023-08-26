@@ -26,7 +26,6 @@ public class GlobalException extends RuntimeException {
     private String exception;
 
     static class GlobalExceptionSerializer extends JsonSerializer<GlobalException> {
-
         @Override
         public void serialize(GlobalException e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
                 throws IOException {
