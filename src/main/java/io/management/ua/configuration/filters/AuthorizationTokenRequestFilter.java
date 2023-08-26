@@ -1,7 +1,7 @@
 package io.management.ua.configuration.filters;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.management.ua.utility.AuthorizationTokenUtility;
+import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthorizationTokenRequestFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
-    private final AuthorizationTokenUtility authorizationTokenUtility;
+    private final AuthorizationTokenUtil authorizationTokenUtil;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -33,12 +33,12 @@ public class AuthorizationTokenRequestFilter extends OncePerRequestFilter {
         if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer ")) {
             String authorizationToken = authorizationHeaderValue.substring(7);
             try {
-                String username = authorizationTokenUtility.getUsernameFromToken(authorizationToken);
+                String username = authorizationTokenUtil.getUsernameFromToken(authorizationToken);
 
                 if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    if (authorizationTokenUtility.validateToken(authorizationToken, userDetails, request)) {
+                    if (authorizationTokenUtil.validateToken(authorizationToken, userDetails, request)) {
                         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

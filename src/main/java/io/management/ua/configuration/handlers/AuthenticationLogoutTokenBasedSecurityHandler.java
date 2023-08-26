@@ -1,7 +1,7 @@
 package io.management.ua.configuration.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.management.ua.utility.AuthorizationTokenUtility;
+import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.Map;
 @Slf4j
 public class AuthenticationLogoutTokenBasedSecurityHandler implements LogoutSuccessHandler {
     private final UserDetailsService userDetailsService;
-    private final AuthorizationTokenUtility authorizationTokenUtility;
+    private final AuthorizationTokenUtil authorizationTokenUtil;
 
     @Override
     public void onLogoutSuccess(@NonNull HttpServletRequest request,
@@ -34,12 +34,12 @@ public class AuthenticationLogoutTokenBasedSecurityHandler implements LogoutSucc
 
             if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer ")) {
                 String authorizationToken = authorizationHeaderValue.substring(7);
-                String username = authorizationTokenUtility.getUsernameFromToken(authorizationToken);
+                String username = authorizationTokenUtil.getUsernameFromToken(authorizationToken);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (!authorizationToken.isEmpty()
-                        && authorizationTokenUtility.validateToken(authorizationToken, userDetails, request)) {
-                    authorizationTokenUtility.blacklistToken(authorizationToken);
+                        && authorizationTokenUtil.validateToken(authorizationToken, userDetails, request)) {
+                    authorizationTokenUtil.blacklistToken(authorizationToken);
                     ObjectMapper jacksonMapper = new ObjectMapper();
 
                     Map<String, Object> responseBodyMap = new HashMap<>();

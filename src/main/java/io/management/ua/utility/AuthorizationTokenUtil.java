@@ -24,7 +24,7 @@ import java.util.function.Function;
 
 @Component
 @PropertySource("classpath:token.properties")
-public class AuthorizationTokenUtility {
+public class AuthorizationTokenUtil {
     private final Map<String, Set<String>> blacklistedTokens = new HashMap<>();
     @Value("${token.duration:3600}")
     private int tokenValidityDuration;

@@ -21,7 +21,7 @@ import java.util.Map;
 public class AuthenticationProcessingService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final AuthorizationTokenUtility authorizationTokenUtility;
+    private final AuthorizationTokenUtil authorizationTokenUtil;
 
     public Map<String, Object> authenticateUserWithTokenBasedAuthorizationStrategy(String username,
                                                                                    String password,
@@ -32,14 +32,14 @@ public class AuthenticationProcessingService {
 
         if (authentication.isAuthenticated()) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            token = authorizationTokenUtility.generateToken(userDetails, request);
+            token = authorizationTokenUtil.generateToken(userDetails, request);
         } else {
             throw new AuthenticationException(HttpStatus.NOT_ACCEPTABLE, "Could not authenticate following credentials");
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-        response.put("expires_at", authorizationTokenUtility.getExpirationDateFromToken(token).getTime());
+        response.put("expires_at", authorizationTokenUtil.getExpirationDateFromToken(token).getTime());
 
         return response;
     }

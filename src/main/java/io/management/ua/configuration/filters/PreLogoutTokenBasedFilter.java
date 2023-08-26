@@ -1,7 +1,7 @@
 package io.management.ua.configuration.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.management.ua.utility.AuthorizationTokenUtility;
+import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -24,7 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PreLogoutTokenBasedFilter extends GenericFilterBean {
     private final UserDetailsService userDetailsService;
-    private final AuthorizationTokenUtility authorizationTokenUtility;
+    private final AuthorizationTokenUtil authorizationTokenUtil;
 
     @Override
     public void doFilter(@NonNull ServletRequest servletRequest,
@@ -36,10 +36,10 @@ public class PreLogoutTokenBasedFilter extends GenericFilterBean {
 
             if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer ")) {
                 String authorizationToken = authorizationHeaderValue.substring(7);
-                String username = authorizationTokenUtility.getUsernameFromToken(authorizationToken);
+                String username = authorizationTokenUtil.getUsernameFromToken(authorizationToken);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                if (authorizationToken.isEmpty() || !authorizationTokenUtility.validateToken(authorizationToken, userDetails, request)) {
+                if (authorizationToken.isEmpty() || !authorizationTokenUtil.validateToken(authorizationToken, userDetails, request)) {
                     processNonAuthenticatedExceptionResponse((HttpServletResponse) servletResponse);
                 }
             } else {
