@@ -23,19 +23,22 @@ public class NumberAnnotationAspect {
 
         for (int paramIndex = 0; paramIndex < method.getParameters().length; paramIndex++) {
             args[paramIndex] = joinPoint.getArgs().length > paramIndex ? joinPoint.getArgs()[paramIndex] : null;
-            Annotation[] annotations = method.getParameters()[paramIndex].getAnnotations();
 
-            for (Annotation annotation : annotations) {
-                if (annotation instanceof DefaultNumberValue) {
-                    double value = ((DefaultNumberValue) annotation).defaultV();
+            if (joinPoint.getArgs().length <= paramIndex || joinPoint.getArgs()[paramIndex] == null) {
+                Annotation[] annotations = method.getParameters()[paramIndex].getAnnotations();
 
-                    switch (method.getParameters()[paramIndex].getType().getName()) {
-                        case "java.lang.Long" -> args[paramIndex] = (long) value;
-                        case "java.lang.Integer" -> args[paramIndex] = (int) value;
-                        case "java.lang.Double" -> args[paramIndex] = value;
-                        case "java.lang.Float" -> args[paramIndex] = (float) value;
-                        case "java.lang.Short" -> args[paramIndex] = (short) value;
-                        default -> throw new RuntimeException("Incompatible data type for usage with annotation DefaultNumberValue");
+                for (Annotation annotation : annotations) {
+                    if (annotation instanceof DefaultNumberValue) {
+                        double value = ((DefaultNumberValue) annotation).defaultV();
+
+                        switch (method.getParameters()[paramIndex].getType().getName()) {
+                            case "java.lang.Long" -> args[paramIndex] = (long) value;
+                            case "java.lang.Integer" -> args[paramIndex] = (int) value;
+                            case "java.lang.Double" -> args[paramIndex] = value;
+                            case "java.lang.Float" -> args[paramIndex] = (float) value;
+                            case "java.lang.Short" -> args[paramIndex] = (short) value;
+                            default -> throw new RuntimeException("Incompatible data type for usage with annotation DefaultNumberValue");
+                        }
                     }
                 }
             }
