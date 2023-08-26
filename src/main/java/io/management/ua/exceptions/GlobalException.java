@@ -33,6 +33,7 @@ public class GlobalException extends RuntimeException {
             objectNode.put("httpStatus", e.getHttpStatus().name());
             objectNode.put("exceptionTime", e.getExceptionTime().toString());
             objectNode.put("exception", e.getException());
+
             jsonGenerator.writeTree(objectNode);
         }
     }
