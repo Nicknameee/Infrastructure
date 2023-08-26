@@ -1,7 +1,6 @@
-package io.management.ua.utility.security.service;
+package io.management.ua.utility;
 
 import io.management.ua.exceptions.AuthenticationException;
-import io.management.ua.utility.AuthorizationTokenUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

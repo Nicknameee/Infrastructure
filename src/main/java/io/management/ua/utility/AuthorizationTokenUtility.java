@@ -63,11 +63,13 @@ public class AuthorizationTokenUtility {
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         Claims claims = getAllClaimsFromToken(token);
+
         return claimsResolver.apply(claims);
     }
 
     private Claims getAllClaimsFromToken(String token) {
         Key key = getTokenKey();
+
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 

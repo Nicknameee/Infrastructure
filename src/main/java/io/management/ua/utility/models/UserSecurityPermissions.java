@@ -1,4 +1,4 @@
-package io.management.ua.utility.security.models;
+package io.management.ua.utility.models;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

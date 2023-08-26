@@ -1,4 +1,4 @@
-package io.management.ua.utility.security.models;
+package io.management.ua.utility.models;
 
 public enum UserSecurityStatus {
     ENABLED,
