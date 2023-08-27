@@ -33,7 +33,8 @@ public class DefaultValueAnnotationAspect {
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof DefaultValue) {
                         String value = ((DefaultValue) annotation).value();
-                        args[paramIndex] = UtilManager.objectMapper().readValue(value, method.getParameters()[paramIndex].getType());
+                        args[paramIndex] = UtilManager.objectMapper()
+                                .readValue(value, method.getParameters()[paramIndex].getType());
                     }
                 }
             }
