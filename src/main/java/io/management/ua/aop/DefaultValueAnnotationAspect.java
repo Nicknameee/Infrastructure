@@ -1,6 +1,7 @@
 package io.management.ua.aop;
 
-import io.management.ua.annotations.DefaultNumberValue;
+import io.management.ua.annotations.DefaultValue;
+import io.management.ua.utility.UtilManager;
 import lombok.NonNull;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,9 +14,9 @@ import java.lang.reflect.Method;
 
 @Aspect
 @Component
-public class NumberAnnotationAspect {
+public class DefaultValueAnnotationAspect {
 
-    @Around("execution(* *(.., @io.management.ua.annotations.DefaultNumberValue (*), ..))")
+    @Around("execution(* *(.., @io.management.ua.annotations.DefaultValue (*), ..))")
     public Object processNumberAnnotatedParameters(@NonNull ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -30,17 +31,9 @@ public class NumberAnnotationAspect {
                 Annotation[] annotations = method.getParameters()[paramIndex].getAnnotations();
 
                 for (Annotation annotation : annotations) {
-                    if (annotation instanceof DefaultNumberValue) {
-                        double value = ((DefaultNumberValue) annotation).v();
-
-                        switch (method.getParameters()[paramIndex].getType().getName()) {
-                            case "java.lang.Long" -> args[paramIndex] = (long) value;
-                            case "java.lang.Integer" -> args[paramIndex] = (int) value;
-                            case "java.lang.Double" -> args[paramIndex] = value;
-                            case "java.lang.Float" -> args[paramIndex] = (float) value;
-                            case "java.lang.Short" -> args[paramIndex] = (short) value;
-                            default -> throw new RuntimeException("Incompatible data type for usage with annotation DefaultNumberValue");
-                        }
+                    if (annotation instanceof DefaultValue) {
+                        String value = ((DefaultValue) annotation).value();
+                        args[paramIndex] = UtilManager.objectMapper().readValue(value, method.getParameters()[paramIndex].getType());
                     }
                 }
             }
