@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<AbstractUserModel, Integer> {
+public interface UserSecurityRepository extends JpaRepository<AbstractUserModel, Integer> {
     Optional<AbstractUserModel> findAbstractUserModelByUsername(String username);
 }

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class UserDetailsImplementationService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserSecurityRepository userSecurityRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findAbstractUserModelByUsername(username)
+        return userSecurityRepository.findAbstractUserModelByUsername(username)
                 .orElseThrow();
     }
 }
