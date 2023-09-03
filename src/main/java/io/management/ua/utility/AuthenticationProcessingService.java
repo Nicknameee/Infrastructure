@@ -26,9 +26,9 @@ public class AuthenticationProcessingService {
     private final AuthorizationTokenUtil authorizationTokenUtil;
     private final EventPublisher<LoginEvent> loginEventEventPublisher;
 
-    public Map<String, Object> authenticateUserWithTokenBasedAuthorizationStrategy(String username,
-                                                                                   String password,
-                                                                                   HttpServletRequest request) throws AuthenticationException {
+    public Map<String, Object> authenticateUserAuthorizationStrategy(String username,
+                                                                     String password,
+                                                                     HttpServletRequest request) throws AuthenticationException {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         String token;
