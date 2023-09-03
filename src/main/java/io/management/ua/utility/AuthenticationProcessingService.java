@@ -1,5 +1,7 @@
 package io.management.ua.utility;
 
+import io.management.ua.events.EventPublisher;
+import io.management.ua.events.LoginEvent;
 import io.management.ua.exceptions.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class AuthenticationProcessingService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final AuthorizationTokenUtil authorizationTokenUtil;
+    private final EventPublisher<LoginEvent> loginEventEventPublisher;
 
     public Map<String, Object> authenticateUserWithTokenBasedAuthorizationStrategy(String username,
                                                                                    String password,
@@ -40,6 +43,8 @@ public class AuthenticationProcessingService {
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("expires_at", authorizationTokenUtil.getExpirationDateFromToken(token).getTime());
+
+        loginEventEventPublisher.publishEvent(new LoginEvent((UserDetails) authentication.getPrincipal()));
 
         return response;
     }
