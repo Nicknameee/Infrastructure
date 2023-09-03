@@ -1,6 +1,8 @@
 package io.management.ua.configuration.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.management.ua.events.EventPublisher;
+import io.management.ua.events.LogoutEvent;
 import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +23,10 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AuthenticationLogoutTokenBasedSecurityHandler implements LogoutSuccessHandler {
+public class AuthenticationLogoutSecurityHandler implements LogoutSuccessHandler {
     private final UserDetailsService userDetailsService;
     private final AuthorizationTokenUtil authorizationTokenUtil;
+    private final EventPublisher<LogoutEvent> logoutEventEventPublisher;
 
     @Override
     public void onLogoutSuccess(@NonNull HttpServletRequest request,
@@ -40,6 +43,9 @@ public class AuthenticationLogoutTokenBasedSecurityHandler implements LogoutSucc
                 if (!authorizationToken.isEmpty()
                         && authorizationTokenUtil.validateToken(authorizationToken, userDetails, request)) {
                     authorizationTokenUtil.blacklistToken(authorizationToken);
+
+                    logoutEventEventPublisher.publishEvent(new LogoutEvent(userDetails));
+
                     ObjectMapper jacksonMapper = new ObjectMapper();
 
                     Map<String, Object> responseBodyMap = new HashMap<>();

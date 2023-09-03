@@ -3,7 +3,7 @@ package io.management.ua.configuration;
 import io.management.ua.configuration.entries.AuthenticationTokenBasedEntryPoint;
 import io.management.ua.configuration.filters.AuthorizationTokenRequestFilter;
 import io.management.ua.configuration.filters.PreLogoutTokenBasedFilter;
-import io.management.ua.configuration.handlers.AuthenticationLogoutTokenBasedSecurityHandler;
+import io.management.ua.configuration.handlers.AuthenticationLogoutSecurityHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class ApplicationSecurityConfiguration {
     private final AuthenticationTokenBasedEntryPoint authenticationTokenBasedEntryPoint;
-    private final AuthenticationLogoutTokenBasedSecurityHandler authenticationLogoutTokenBasedSecurityHandler;
+    private final AuthenticationLogoutSecurityHandler authenticationLogoutSecurityHandler;
     private final UserDetailsService userDetailsService;
     private final AuthorizationTokenRequestFilter authorizationTokenRequestFilter;
     private final PreLogoutTokenBasedFilter preLogoutTokenBasedFilter;
@@ -60,7 +60,7 @@ public class ApplicationSecurityConfiguration {
                 .authenticated()
                 .and()
                 .logout()
-                .logoutSuccessHandler(authenticationLogoutTokenBasedSecurityHandler)
+                .logoutSuccessHandler(authenticationLogoutSecurityHandler)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", HttpMethod.POST.name()))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)

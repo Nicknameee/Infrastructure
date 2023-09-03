@@ -1,0 +1,18 @@
+package io.management.ua.events;
+
+import lombok.Getter;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.Clock;
+
+@Getter
+public class LogoutEvent extends ApplicationEvent {
+
+    private final UserDetails userDetails;
+
+    public LogoutEvent(UserDetails userDetails) {
+        super(userDetails, Clock.systemUTC());
+        this.userDetails = userDetails;
+    }
+}
