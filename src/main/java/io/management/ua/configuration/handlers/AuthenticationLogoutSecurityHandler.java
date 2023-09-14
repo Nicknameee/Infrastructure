@@ -1,7 +1,7 @@
 package io.management.ua.configuration.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.management.ua.events.EventPublisher;
+import io.management.ua.events.publishers.EventPublisher;
 import io.management.ua.events.LogoutEvent;
 import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;

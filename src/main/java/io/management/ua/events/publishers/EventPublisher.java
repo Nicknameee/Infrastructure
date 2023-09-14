@@ -1,4 +1,4 @@
-package io.management.ua.events;
+package io.management.ua.events.publishers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

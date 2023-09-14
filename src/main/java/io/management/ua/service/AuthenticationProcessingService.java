@@ -1,8 +1,9 @@
-package io.management.ua.utility;
+package io.management.ua.service;
 
-import io.management.ua.events.EventPublisher;
+import io.management.ua.events.publishers.EventPublisher;
 import io.management.ua.events.LoginEvent;
 import io.management.ua.exceptions.AuthenticationException;
+import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
