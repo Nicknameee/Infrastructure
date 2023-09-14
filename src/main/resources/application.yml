@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
   datasource:
     driver-class-name: org.postgresql.Driver
     username: ${UDB_USERNAME}
