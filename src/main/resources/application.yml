@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: default, native, dev
   kafka:
     bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
   datasource:
