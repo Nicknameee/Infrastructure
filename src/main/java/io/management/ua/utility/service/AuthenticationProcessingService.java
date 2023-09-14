@@ -1,4 +1,4 @@
-package io.management.ua.service;
+package io.management.ua.utility.service;
 
 import io.management.ua.events.publishers.EventPublisher;
 import io.management.ua.events.LoginEvent;
