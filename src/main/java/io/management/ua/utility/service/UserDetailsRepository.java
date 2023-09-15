@@ -1,4 +1,4 @@
-package io.management.ua.utility.repository;
+package io.management.ua.utility.service;
 
 import io.management.ua.utility.models.UserDetailsModel;
 import org.springframework.data.jpa.repository.JpaRepository;

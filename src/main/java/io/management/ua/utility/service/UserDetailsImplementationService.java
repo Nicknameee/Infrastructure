@@ -1,6 +1,5 @@
 package io.management.ua.utility.service;
 
-import io.management.ua.utility.repository.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
