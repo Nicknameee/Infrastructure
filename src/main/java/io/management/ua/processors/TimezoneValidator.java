@@ -1,4 +1,4 @@
-package io.management.ua.annotations.processors;
+package io.management.ua.processors;
 
 import io.management.ua.annotations.Timezone;
 

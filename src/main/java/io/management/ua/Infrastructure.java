@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @Slf4j
-public class Main {
+public class Infrastructure    {
     public static void main(String[] args) {
-        log.debug("Configuration service started");
-        SpringApplication.run(Main.class);
+        log.debug("Infrastructure service started");
+        SpringApplication.run(Infrastructure.class);
     }
 }

@@ -1,7 +1,7 @@
 package io.management.ua.annotations;
 
 
-import io.management.ua.annotations.processors.TimezoneValidator;
+import io.management.ua.processors.TimezoneValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
