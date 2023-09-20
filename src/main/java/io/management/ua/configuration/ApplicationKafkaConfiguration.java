@@ -33,7 +33,8 @@ public class ApplicationKafkaConfiguration {
                         RETRIES_CONFIG, 0,
                         BUFFER_MEMORY_CONFIG, 33554432,
                         KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
-                        VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
+                        VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class,
+                        JsonDeserializer.TRUSTED_PACKAGES, "io.management.ua.amqp"
                 ));
     }
 
@@ -41,6 +42,8 @@ public class ApplicationKafkaConfiguration {
     public ConsumerFactory<String, ?> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class));
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class,
+                JsonDeserializer.TRUSTED_PACKAGES, "io.management.ua.amqp"
+        ));
     }
 }
