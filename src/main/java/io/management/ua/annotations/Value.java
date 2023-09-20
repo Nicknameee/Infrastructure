@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD, ElementType.TYPE_PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@SuppressWarnings("unused")
 public @interface Value {
     boolean required() default false;
     String resource() default "application.yml";
