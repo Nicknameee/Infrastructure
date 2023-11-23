@@ -15,11 +15,4 @@ public class Infrastructure {
         log.debug("Infrastructure service started");
         SpringApplication.run(Infrastructure.class);
     }
-
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-    @PostConstruct
-    public void consrt() {
-        kafkaTemplate.send("service", "CSCSC");
-    }
 }
