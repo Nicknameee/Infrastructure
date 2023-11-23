@@ -9,7 +9,7 @@ public class APIRequestParameterNames {
     public static final String itemsNumber = "itemsNumber";
     public static final String itemsPackage = "itemsPackage";
     public static final String citySender = "citySender";
-    public static final String cityReceiver = "cityReceiver";
+    public static final String cityReceiver = "cityRecipient";
     public static final String cost = "cost";
     public static final String API = "api";
     public static final String departmentType = "departmentType";
