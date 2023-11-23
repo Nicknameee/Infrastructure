@@ -31,6 +31,8 @@ public class ApplicationKafkaConfiguration {
                         ProducerConfig.RETRIES_CONFIG, 0,
                         ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432,
                         ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 7000,
+                        ProducerConfig.LINGER_MS_CONFIG, 3000,
+                        ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 4000,
                         ProducerConfig.RECONNECT_BACKOFF_MAX_MS_CONFIG, 3000,
                         ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
                         ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class,
