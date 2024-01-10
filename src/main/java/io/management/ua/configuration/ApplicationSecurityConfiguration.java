@@ -44,7 +44,8 @@ public class ApplicationSecurityConfiguration {
         http
                 .csrf().disable()
                 .httpBasic().disable()
-                .formLogin().disable();
+                .formLogin().disable()
+                .cors().disable();
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

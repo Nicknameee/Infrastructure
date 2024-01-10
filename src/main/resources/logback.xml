@@ -1,0 +1,14 @@
+<configuration>
+    <appender name="ELASTICSEARCH" class="ch.qos.logback.core.elasticsearch.ElasticsearchAppender">
+        <clientName>elasticsearch</clientName>
+        <index>logs</index>
+        <type>log</type>
+        <hosts>localhost:9200</hosts>
+        <username>elastic</username>
+        <password>sdhjkfhj4jh54hjdsf</password>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="ELASTICSEARCH"/>
+    </root>
+</configuration>
