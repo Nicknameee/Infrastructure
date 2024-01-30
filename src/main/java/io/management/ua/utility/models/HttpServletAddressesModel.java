@@ -10,8 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class HttpServletAddressesModel {
-    private String scheme;
-    private String server;
-    private String port;
     private String origin;
 }
