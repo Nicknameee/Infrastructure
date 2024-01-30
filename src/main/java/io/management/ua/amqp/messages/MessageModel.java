@@ -20,4 +20,9 @@ public class MessageModel {
     @NotBlank(message = "Subject of the message can not be blank")
     private String subject;
     private ZonedDateTime sendingDate;
+    private MessageType messageType;
+
+    public enum MessageType {
+        PLAIN_TEXT, HTML, WITH_FILE
+    }
 }
