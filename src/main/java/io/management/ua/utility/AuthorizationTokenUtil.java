@@ -3,6 +3,9 @@ package io.management.ua.utility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.management.ua.utility.models.BlacklistedToken;
+import io.management.ua.utility.repository.BlacklistedTokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.lang.NonNull;
@@ -18,14 +21,17 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Component
 @PropertySource("classpath:token.properties")
+@RequiredArgsConstructor
 public class AuthorizationTokenUtil {
-    private final Map<String, Set<String>> blacklistedTokens = new HashMap<>();
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
     @Value("${token.duration:3600}")
     private int tokenValidityDuration;
     @Value("${token.secret}")
@@ -33,24 +39,21 @@ public class AuthorizationTokenUtil {
 
     @Scheduled(initialDelayString = "${token.duration:3600}", fixedRateString = "${token.duration:3600}", timeUnit = TimeUnit.SECONDS)
     public void clearTokens() {
-        for (Map.Entry<String, Set<String>> entry : blacklistedTokens.entrySet()) {
-            Set<String> validTokens = new HashSet<>();
-
-            for (String token : entry.getValue()) {
-
-                if (checkTokenExpiration(token)) {
-                    validTokens.add(token);
-                }
+        Iterable<BlacklistedToken> blacklistedTokens = blacklistedTokenRepository.findAll();
+        blacklistedTokens.forEach(blacklistedToken -> {
+            if (checkTokenExpiration(blacklistedToken.getToken())) {
+                blacklistedTokenRepository.deleteById(blacklistedToken.getId());
             }
-
-            blacklistedTokens.put(entry.getKey(), validTokens);
-        }
+        });
     }
 
     public void blacklistToken(String token) {
         String username = getUsernameFromToken(token);
-        blacklistedTokens.putIfAbsent(username, new HashSet<>());
-        blacklistedTokens.get(username).add(token);
+        BlacklistedToken blacklistedToken = new BlacklistedToken();
+        blacklistedToken.setToken(token);
+        blacklistedToken.setUsername(username);
+
+        blacklistedTokenRepository.save(blacklistedToken);
     }
 
     public String getUsernameFromToken(String token) {
@@ -118,12 +121,6 @@ public class AuthorizationTokenUtil {
     }
 
     private boolean checkTokenBlacklist(String token) {
-        String username = getUsernameFromToken(token);
-
-        if (blacklistedTokens.containsKey(username)) {
-            return blacklistedTokens.get(username).contains(token);
-        }
-
-        return false;
+        return blacklistedTokenRepository.existsByToken(token);
     }
 }

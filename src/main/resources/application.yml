@@ -8,3 +8,7 @@ spring:
     username: ${UDB_USERNAME:postgres}
     password: ${UDB_PASSWORD:1904}
     url: ${UDB_URL}
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    database: ${REDIS_DATA:2}
