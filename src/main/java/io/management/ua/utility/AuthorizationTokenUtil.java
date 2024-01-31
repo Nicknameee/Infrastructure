@@ -42,7 +42,7 @@ public class AuthorizationTokenUtil {
         Iterable<BlacklistedToken> blacklistedTokens = blacklistedTokenRepository.findAll();
         blacklistedTokens.forEach(blacklistedToken -> {
             if (checkTokenExpiration(blacklistedToken.getToken())) {
-                blacklistedTokenRepository.deleteById(blacklistedToken.getId());
+                blacklistedTokenRepository.deleteById(blacklistedToken.getToken());
             }
         });
     }
@@ -121,6 +121,6 @@ public class AuthorizationTokenUtil {
     }
 
     private boolean checkTokenBlacklist(String token) {
-        return blacklistedTokenRepository.existsByToken(token);
+        return blacklistedTokenRepository.findById(token).isPresent();
     }
 }
