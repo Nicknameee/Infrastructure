@@ -11,4 +11,4 @@ spring:
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
-    database: ${REDIS_DATA:2}
+    database: ${REDIS_DATA:0}
