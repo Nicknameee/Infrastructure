@@ -6,7 +6,7 @@
 
     <groupId>io.management.ua</groupId>
     <artifactId>Infrastructure</artifactId>
-    <version>LATEST</version>
+    <version>1</version>
 
     <build>
         <plugins>
