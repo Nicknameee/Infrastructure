@@ -38,7 +38,7 @@
                             <mainClass>io.management.ua.Infrastructure</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>${project.basedir}</outputDirectory>
+                    <outputDirectory>${project.basedir}/target</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
