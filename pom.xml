@@ -30,7 +30,7 @@
                             <mainClass>io.management.ua.Infrastructure</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>${project.basedir}/src/main/java/io/management/ua/Infrastructure</outputDirectory>
+                    <outputDirectory>${project.basedir}</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
