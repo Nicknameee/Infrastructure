@@ -20,6 +20,7 @@ public class MessageModel {
     @NotBlank(message = "Subject of the message can not be blank")
     private String subject;
     private ZonedDateTime sendingDate;
+    private ZonedDateTime expiringDate;
     private MessagePlatform messagePlatform;
     private MessageType messageType;
 
