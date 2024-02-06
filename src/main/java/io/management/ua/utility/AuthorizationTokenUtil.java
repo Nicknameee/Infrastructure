@@ -1,6 +1,7 @@
 package io.management.ua.utility;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.management.ua.utility.models.BlacklistedToken;
@@ -41,7 +42,11 @@ public class AuthorizationTokenUtil {
     public void clearTokens() {
         Iterable<BlacklistedToken> blacklistedTokens = blacklistedTokenRepository.findAll();
         blacklistedTokens.forEach(blacklistedToken -> {
-            if (checkTokenExpiration(blacklistedToken.getToken())) {
+            try {
+                if (checkTokenExpiration(blacklistedToken.getToken())) {
+                    blacklistedTokenRepository.deleteById(blacklistedToken.getToken());
+                }
+            } catch (ExpiredJwtException e) {
                 blacklistedTokenRepository.deleteById(blacklistedToken.getToken());
             }
         });
