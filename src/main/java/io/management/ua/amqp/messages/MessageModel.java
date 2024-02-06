@@ -20,7 +20,12 @@ public class MessageModel {
     @NotBlank(message = "Subject of the message can not be blank")
     private String subject;
     private ZonedDateTime sendingDate;
+    private MessagePlatform messagePlatform;
     private MessageType messageType;
+
+    public enum MessagePlatform {
+        EMAIL, TELEGRAM
+    }
 
     public enum MessageType {
         PLAIN_TEXT, HTML, WITH_FILE
