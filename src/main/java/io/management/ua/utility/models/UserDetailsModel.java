@@ -20,6 +20,8 @@ public class UserDetailsModel implements UserDetails {
     private String username;
     @Column(name = "email" , nullable = false , unique = true)
     private String email;
+    @Column(name = "telegram_username", unique = true)
+    private String telegramUsername;
     @Column(name = "password" , nullable = false)
     private String password;
     @Column(name = "login_time" , nullable = false)
