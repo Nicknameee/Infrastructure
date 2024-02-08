@@ -1,5 +1,6 @@
 package io.management.ua.utility.service;
 
+import io.management.ua.exceptions.NotFoundException;
 import io.management.ua.utility.repository.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,6 @@ public class UserDetailsImplementationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userDetailsRepository.findAbstractUserModelByUsername(username)
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(String.format("User with username %s was not found", username)));
     }
 }

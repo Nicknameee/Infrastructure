@@ -24,11 +24,27 @@ import java.util.Map;
 @Service
 @Slf4j
 public class NetworkService {
+    public NetworkResponse performRequest(@NotNull String url) throws URISyntaxException, IOException, InterruptedException {
+        return performRequest(HttpMethod.GET, url, Map.of(), null);
+    }
+
+    public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
+                                          @NotNull String url) throws URISyntaxException, IOException, InterruptedException {
+        return performRequest(httpMethod, url, Map.of(), null);
+    }
+
+    public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
+                                          @NotNull String url,
+                                          @NotNull Map<String, String> headers) throws URISyntaxException, IOException, InterruptedException {
+        return performRequest(httpMethod, url, headers, null);
+    }
+
     public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
                                           @NotNull String url,
                                           @NotNull Map<String, String> headers,
                                           @Nullable Object body) throws URISyntaxException, IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NEVER)
                 .connectTimeout(ChronoUnit.SECONDS.getDuration().multipliedBy(5))
                 .build();
 
@@ -39,6 +55,7 @@ public class NetworkService {
             headerList.add(key);
             headerList.add(value);
         });
+
         HttpRequest httpRequest = HttpRequest.newBuilder(new URI(url))
                 .headers(headerList.toArray(new String[0]))
                 .method(httpMethod.name(), HttpRequest.BodyPublishers
@@ -46,7 +63,10 @@ public class NetworkService {
                                 .writeValueAsString(body)))
                 .build();
 
+        log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body);
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+        log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body());
 
         return NetworkResponse.builder()
                 .httpStatus(HttpStatus.valueOf(response.statusCode()))

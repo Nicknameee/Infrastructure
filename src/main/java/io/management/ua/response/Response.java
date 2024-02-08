@@ -2,16 +2,22 @@ package io.management.ua.response;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Data
-@NoArgsConstructor
 @JsonSerialize(using = ResponseSerializer.class)
 public class Response<T> {
+    private String exception;
     private T data;
     private HttpStatus httpStatus;
     private static Response<?> instance;
+
+    private Response() {
+    }
+
+    private Response(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
 
     private Response(T data) {
         this.data = data;
@@ -20,14 +26,12 @@ public class Response<T> {
     public static Response<?> ok() {
         return new Response<>();
     }
-    public static Response<?> ok(Object data) {
-        Response<?> instance = new Response<>(data);
-        instance.setHttpStatus(HttpStatus.OK);
 
-        return instance;
+    public static Response<?> ok(Object data) {
+        return new Response<>(data);
     }
 
-    public static void of(HttpStatus httpStatus) {
+    public static Response<?> of(HttpStatus httpStatus) {
         if (instance == null) {
             instance = new Response<>();
             instance.setHttpStatus(httpStatus);
@@ -37,9 +41,10 @@ public class Response<T> {
             instance.setHttpStatus(httpStatus);
         }
 
+        return instance;
     }
 
-    public static void data(Object data) {
+    public Response<?> data(Object data) {
         if (instance == null) {
             instance = new Response<>(data);
         } else {
@@ -47,12 +52,20 @@ public class Response<T> {
             instance = new Response<>(data);
             instance.setHttpStatus(existingStatus);
         }
+
+        return instance;
     }
 
-    public static Response<?> build() {
+    public Response<?> build() {
         Response<?> response = instance;
         instance = null;
 
         return response;
+    }
+
+    public Response<?> exception(String exception) {
+        instance.setException(exception);
+
+        return instance;
     }
 }

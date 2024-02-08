@@ -10,8 +10,16 @@ public class ResponseSerializer extends JsonSerializer<Response<?>> {
     @Override
     public void serialize(Response<?> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
-        gen.writeFieldName("data");
-        gen.writeObject(value.getData());
+
+        if (value.getHttpStatus().isError()) {
+            gen.writeFieldName("exception");
+            gen.writeString(value.getException());
+        }
+
+        if (value.getData() != null) {
+            gen.writeFieldName("data");
+            gen.writeObject(value.getData());
+        }
         gen.writeFieldName("status");
         gen.writeObject(value.getHttpStatus());
         gen.writeEndObject();
