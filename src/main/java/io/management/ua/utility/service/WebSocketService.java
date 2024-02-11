@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class WebSocketService<T> {
+public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     @PostConstruct
@@ -20,12 +20,18 @@ public class WebSocketService<T> {
         this.simpMessagingTemplate.setSendTimeout(1000L);
     }
 
-    public void sendMessage(String topic, T payload) {
-        WebSocketMessage<T> webSocketMessage = new WebSocketMessage<>();
+    public void sendMessage(String topic, Object payload) {
+        WebSocketMessage<Object> webSocketMessage = new WebSocketMessage<>();
         webSocketMessage.setData(payload);
 
+        String content = "";
         try {
-            simpMessagingTemplate.convertAndSend(topic, UtilManager.objectMapper().writeValueAsString(webSocketMessage));
+            if (payload != null) {
+                content = UtilManager.objectMapper().writeValueAsString(webSocketMessage);
+            }
+
+            simpMessagingTemplate.convertAndSend(topic, content);
+            log.debug("Message {} was sent to topic {}", payload, topic);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
