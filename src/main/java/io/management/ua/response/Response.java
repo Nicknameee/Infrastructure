@@ -13,6 +13,7 @@ public class Response<T> {
     private static Response<?> instance;
 
     private Response() {
+        this.httpStatus = HttpStatus.OK;
     }
 
     private Response(HttpStatus httpStatus) {
@@ -20,6 +21,7 @@ public class Response<T> {
     }
 
     private Response(T data) {
+        this.httpStatus = HttpStatus.OK;
         this.data = data;
     }
 

@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Set;
 
 @Getter
-public enum UserSecurityRoles {
+public enum UserSecurityRole {
     ROLE_SUPPORT(null),
     ROLE_OPERATOR(UserSecurityPermissions.getUserAuthorities()),
     ROLE_CUSTOMER(UserSecurityPermissions.getCustomerAuthorities()),
@@ -14,7 +14,7 @@ public enum UserSecurityRoles {
 
     private final Set<GrantedAuthority> authorities;
 
-    UserSecurityRoles(Set<GrantedAuthority> authorities) {
+    UserSecurityRole(Set<GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
 }

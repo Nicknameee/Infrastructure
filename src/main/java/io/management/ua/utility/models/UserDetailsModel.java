@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserDetailsModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "username" , nullable = false , unique = true)
     private String username;
     @Column(name = "email" , nullable = false , unique = true)
@@ -32,7 +32,7 @@ public class UserDetailsModel implements UserDetails {
     private Date logoutTime = new Date(0);
     @Column(name = "role" , nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserSecurityRoles role = UserSecurityRoles.ROLE_CUSTOMER;
+    private UserSecurityRole role = UserSecurityRole.ROLE_CUSTOMER;
     @Column(name = "status" , nullable = false)
     @Enumerated(EnumType.STRING)
     private UserSecurityStatus status = UserSecurityStatus.DISABLED;
