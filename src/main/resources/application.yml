@@ -9,6 +9,7 @@ spring:
     password: ${UDB_PASSWORD:1904}
     url: ${UDB_URL}
   redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    database: ${REDIS_DATA:0}
+    host: ${REDIS_HOST_INFRASTRUCTURE:localhost}
+    port: ${REDIS_PORT_INFRASTRUCTURE:6379}
+    database: ${REDIS_DATABASE_INFRASTRUCTURE:0}
+    password: ${REDIS_PASSWORD_INFRASTRUCTURE:1904}
