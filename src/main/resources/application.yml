@@ -21,7 +21,7 @@ spring:
     username: ${USER_READER_DB_USERNAME:users_reader}
     password: ${USER_READER_DB_PASSWORD:1904}
     url: ${USER_READER_DB_URL}
-  redis:
+  redis-users:
     host: ${REDIS_HOST_INFRASTRUCTURE:localhost}
     port: ${REDIS_PORT_INFRASTRUCTURE:6379}
     database: ${REDIS_DATABASE_INFRASTRUCTURE:0}
