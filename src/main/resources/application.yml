@@ -11,16 +11,21 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     bootstrap-servers: ${KAFKA_URL:localhost:9092}
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:1904}
-    url: ${DB_URL}
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    username: ${DB_USERNAME:postgres}
+#    password: ${DB_PASSWORD:1904}
+#    url: ${DB_URL}
   datasource-users:
     driver-class-name: org.postgresql.Driver
     username: ${USER_READER_DB_USERNAME:users_reader}
     password: ${USER_READER_DB_PASSWORD:1904}
     url: ${USER_READER_DB_URL}
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    database: ${REDIS_DATABASE:0}
+    password: ${REDIS_PASSWORD:1904}
   redis-users:
     host: ${REDIS_HOST_INFRASTRUCTURE:localhost}
     port: ${REDIS_PORT_INFRASTRUCTURE:6379}

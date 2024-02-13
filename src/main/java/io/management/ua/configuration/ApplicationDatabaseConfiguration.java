@@ -1,6 +1,8 @@
 package io.management.ua.configuration;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -24,6 +26,7 @@ import javax.sql.DataSource;
 public class ApplicationDatabaseConfiguration {
     @Primary
     @Bean
+    @ConditionalOnProperty(prefix = "spring.datasource", name = "url")
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSourceProperties databaseDataSourceProperties() {
         return new DataSourceProperties();
@@ -31,12 +34,14 @@ public class ApplicationDatabaseConfiguration {
 
     @Primary
     @Bean
+    @ConditionalOnBean(name = "databaseDataSourceProperties")
     public DataSource databaseDataSource(@Qualifier("databaseDataSourceProperties") DataSourceProperties dataSourceProperties) {
         return dataSourceProperties.initializeDataSourceBuilder().build();
     }
 
     @Primary
     @Bean(name = "databaseEntityManagerFactory")
+    @ConditionalOnBean(name = "databaseDataSourceProperties")
     public LocalContainerEntityManagerFactoryBean databaseEntityManagerFactory(@Qualifier("databaseDataSource") DataSource databaseDataSource,
                                                                              EntityManagerFactoryBuilder builder) {
 
@@ -48,6 +53,7 @@ public class ApplicationDatabaseConfiguration {
 
     @Primary
     @Bean
+    @ConditionalOnBean(name = "databaseDataSourceProperties")
     public PlatformTransactionManager databaseTransactionManager(@Qualifier("databaseEntityManagerFactory") EntityManagerFactory factory) {
         return new JpaTransactionManager(factory);
     }
