@@ -54,7 +54,7 @@ public class ApplicationSecurityConfiguration {
                 .addFilterBefore(preLogoutTokenBasedFilter, LogoutFilter.class);
         http
                 .authorizeRequests()
-                .antMatchers("/stomp/**").permitAll()
+                .antMatchers("/ws/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
                 .antMatchers("/util/**", "/api/**/allowed").permitAll()
                 .anyRequest()
