@@ -1,6 +1,6 @@
-package io.management.ua.utility.repository;
+package io.management.users.repository;
 
-import io.management.ua.utility.models.UserDetailsModel;
+import io.management.users.models.UserDetailsModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

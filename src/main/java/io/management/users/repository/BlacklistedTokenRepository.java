@@ -1,6 +1,7 @@
-package io.management.ua.utility.repository;
+package io.management.users.repository;
 
-import io.management.ua.utility.models.BlacklistedToken;
+
+import io.management.users.models.BlacklistedToken;
 import org.springframework.data.keyvalue.repository.KeyValueRepository;
 
 public interface BlacklistedTokenRepository extends KeyValueRepository<BlacklistedToken, String> {

@@ -1,9 +1,9 @@
-package io.management.ua.utility.service;
+package io.management.users.service;
 
 import io.management.ua.exceptions.NotFoundException;
-import io.management.ua.utility.models.UserDetailsModel;
 import io.management.ua.utility.models.UserSecurityRole;
-import io.management.ua.utility.repository.UserDetailsRepository;
+import io.management.users.models.UserDetailsModel;
+import io.management.users.repository.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

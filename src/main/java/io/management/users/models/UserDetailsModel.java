@@ -1,6 +1,8 @@
-package io.management.ua.utility.models;
+package io.management.users.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.management.ua.utility.models.UserSecurityRole;
+import io.management.ua.utility.models.UserSecurityStatus;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -35,7 +35,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>io.management.ua.Infrastructure</mainClass>
+                            <mainClass>io.management.Infrastructure</mainClass>
                         </manifest>
                     </archive>
                     <outputDirectory>${project.basedir}/target</outputDirectory>

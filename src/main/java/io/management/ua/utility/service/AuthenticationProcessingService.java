@@ -1,7 +1,7 @@
 package io.management.ua.utility.service;
 
-import io.management.ua.events.publishers.EventPublisher;
 import io.management.ua.events.LoginEvent;
+import io.management.ua.events.publishers.EventPublisher;
 import io.management.ua.exceptions.AuthenticationException;
 import io.management.ua.utility.AuthorizationTokenUtil;
 import lombok.RequiredArgsConstructor;
