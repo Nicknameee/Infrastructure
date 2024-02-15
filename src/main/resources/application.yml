@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: default, native, dev
+    active: ${SPRING_PROFILES_ACTIVE:default, native, dev}
   jpa:
     show-sql: false
     hibernate:
