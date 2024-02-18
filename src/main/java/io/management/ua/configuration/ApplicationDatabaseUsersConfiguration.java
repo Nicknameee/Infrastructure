@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -21,17 +22,20 @@ import javax.sql.DataSource;
         transactionManagerRef = "usersTransactionManager",
         basePackages = "io.management.users")
 public class ApplicationDatabaseUsersConfiguration {
+    @Primary
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource-users")
     public DataSourceProperties usersDataSourceProperties() {
         return new DataSourceProperties();
     }
 
+    @Primary
     @Bean
     public DataSource usersDataSource(@Qualifier("usersDataSourceProperties") DataSourceProperties dataSourceProperties) {
         return dataSourceProperties.initializeDataSourceBuilder().build();
     }
 
+    @Primary
     @Bean(name = "usersEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean usersEntityManagerFactory(@Qualifier("usersDataSource") DataSource cardsDataSource,
                                                                              EntityManagerFactoryBuilder builder) {
@@ -42,6 +46,7 @@ public class ApplicationDatabaseUsersConfiguration {
                 .build();
     }
 
+    @Primary
     @Bean
     public PlatformTransactionManager usersTransactionManager(@Qualifier("usersEntityManagerFactory")
                                                                EntityManagerFactory factory) {
