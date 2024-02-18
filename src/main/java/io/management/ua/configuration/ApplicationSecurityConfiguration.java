@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
@@ -42,10 +43,9 @@ public class ApplicationSecurityConfiguration {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .httpBasic().disable()
-                .formLogin().disable()
-                .cors().disable();
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable);
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -57,6 +57,7 @@ public class ApplicationSecurityConfiguration {
                 .antMatchers("/ws/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
                 .antMatchers("/util/**", "/api/**/allowed").permitAll()
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
