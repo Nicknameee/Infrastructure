@@ -1,5 +1,6 @@
 package io.management.ua.utility.service;
 
+import io.management.ua.annotations.Export;
 import io.management.ua.events.LoginEvent;
 import io.management.ua.events.publishers.EventPublisher;
 import io.management.ua.exceptions.AuthenticationException;
@@ -27,9 +28,10 @@ public class AuthenticationProcessingService {
     private final AuthorizationTokenUtil authorizationTokenUtil;
     private final EventPublisher<LoginEvent> loginEventEventPublisher;
 
-    public Map<String, Object> authenticateUserAuthorizationStrategy(String username,
-                                                                     String password,
-                                                                     HttpServletRequest request) throws AuthenticationException {
+    @Export
+    public Map<String, Object> authenticate(String username,
+                                            String password,
+                                            HttpServletRequest request) throws AuthenticationException {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         String token;

@@ -20,9 +20,9 @@ import java.util.Optional;
 public class UserDetailsImplementationService implements UserDetailsService {
     private final UserDetailsRepository userDetailsRepository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDetailsRepository.findAbstractUserModelByUsername(username)
-                .orElseThrow(() -> new NotFoundException(String.format("User with username %s was not found", username)));
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return userDetailsRepository.findUserDetailsByLogin(login)
+                .orElseThrow(() -> new NotFoundException(String.format("User with login %s was not found", login)));
     }
 
     @Export
