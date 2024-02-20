@@ -1,5 +1,6 @@
 package io.management.users.service;
 
+import io.management.ua.annotations.Export;
 import io.management.ua.exceptions.NotFoundException;
 import io.management.ua.utility.models.UserSecurityRole;
 import io.management.users.models.UserDetailsModel;
@@ -24,6 +25,7 @@ public class UserDetailsImplementationService implements UserDetailsService {
                 .orElseThrow(() -> new NotFoundException(String.format("User with username %s was not found", username)));
     }
 
+    @Export
     public UserSecurityRole getUserRoleById(Long id) {
         Optional<UserDetailsModel> userDetailsModel = userDetailsRepository.findById(id);
 
