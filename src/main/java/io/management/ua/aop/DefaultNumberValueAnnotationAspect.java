@@ -1,7 +1,7 @@
 package io.management.ua.aop;
 
-import io.management.ua.annotations.DefaultValue;
-import io.management.ua.utility.UtilManager;
+import io.management.ua.annotations.DefaultNumberValue;
+import io.management.ua.exceptions.AnnotationProcessingException;
 import lombok.NonNull;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,9 +14,9 @@ import java.lang.reflect.Method;
 
 @Aspect
 @Component
-public class DefaultValueAnnotationAspect {
+public class DefaultNumberValueAnnotationAspect {
 
-    @Around("execution(* *(.., @io.management.ua.annotations.DefaultValue (*), ..))")
+    @Around("execution(* *(.., @io.management.ua.annotations.DefaultNumberValue (*), ..))")
     public Object processNumberAnnotatedParameters(@NonNull ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -31,10 +31,17 @@ public class DefaultValueAnnotationAspect {
                 Annotation[] annotations = method.getParameters()[paramIndex].getAnnotations();
 
                 for (Annotation annotation : annotations) {
-                    if (annotation instanceof DefaultValue) {
-                        String value = ((DefaultValue) annotation).value();
-                        args[paramIndex] = UtilManager.objectMapper()
-                                .readValue(value, method.getParameters()[paramIndex].getType());
+                    if (annotation instanceof DefaultNumberValue) {
+                        int number = ((DefaultNumberValue) annotation).number();
+
+                        if (args[paramIndex] instanceof Number) {
+                            args[paramIndex] = number;
+                        } else {
+                            throw new AnnotationProcessingException(String.format("Annotation can not be processed because used not with number data type variable at %s:%s %s",
+                                    joinPoint.getSignature().getClass().getName(),
+                                    joinPoint.getSourceLocation().getLine(),
+                                    joinPoint.getSignature().getName()));
+                        }
                     }
                 }
             }
