@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 @Aspect
 @Component
@@ -33,9 +34,10 @@ public class DefaultStringValueAnnotationAspect {
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof DefaultStringValue) {
                         String string = ((DefaultStringValue) annotation).string();
+                        Parameter parameter = method.getParameters()[paramIndex];
 
-                        if (args[paramIndex] instanceof String) {
-                            args[paramIndex] = string;
+                        if (String.class.isAssignableFrom(parameter.getType())) {
+                           args[paramIndex] = string;
                         } else {
                             throw new AnnotationProcessingException(String.format("Annotation can not be processed because used not with symbol data type variable at %s:%s %s",
                                     joinPoint.getSignature().getClass().getName(),

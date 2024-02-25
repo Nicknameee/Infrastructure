@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 @Aspect
 @Component
@@ -33,8 +34,9 @@ public class DefaultNumberValueAnnotationAspect {
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof DefaultNumberValue) {
                         int number = ((DefaultNumberValue) annotation).number();
+                        Parameter parameter = method.getParameters()[paramIndex];
 
-                        if (args[paramIndex] instanceof Number) {
+                        if (Number.class.isAssignableFrom(parameter.getType())) {
                             args[paramIndex] = number;
                         } else {
                             throw new AnnotationProcessingException(String.format("Annotation can not be processed because used not with number data type variable at %s:%s %s",
