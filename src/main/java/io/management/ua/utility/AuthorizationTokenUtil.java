@@ -107,7 +107,7 @@ public class AuthorizationTokenUtil {
     }
 
     public boolean validateToken(String token,
-                                 UserDetails userDetails,
+                                 @NonNull UserDetails userDetails,
                                  @NonNull HttpServletRequest request) {
         String username = getUsernameFromToken(token);
         Claims claims = getAllClaimsFromToken(token);

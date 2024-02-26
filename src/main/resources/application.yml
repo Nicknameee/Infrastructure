@@ -15,9 +15,24 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ${USER_READER_DB_USERNAME:users_reader}
     password: ${USER_READER_DB_PASSWORD:1904}
-    url: ${USER_READER_DB_URL}
+    url: ${USER_READER_DB_URL:jdbc:postgresql://localhost:5432/users}
+  datasource-resources:
+    driver-class-name: org.postgresql.Driver
+    username: ${RESOURCE_DB_USERNAME:resources}
+    password: ${RESOURCE_DB_PASSWORD:1904}
+    url: ${RESOURCE_DB_URL:jdbc:postgresql://localhost:5432/resources}
   redis-users:
     host: ${REDIS_HOST_INFRASTRUCTURE:localhost}
     port: ${REDIS_PORT_INFRASTRUCTURE:6379}
     database: ${REDIS_DATABASE_INFRASTRUCTURE:0}
     password: ${REDIS_PASSWORD_INFRASTRUCTURE:1904}
+
+api:
+  resources:
+    images:
+      host: ${CLOUDINARY_HOST:https://api.cloudinary.com/v1_1/dqjeb0ob2/image}
+      key: ${CLOUDINARY_KEY:474919738819372}
+      secret: ${CLOUDINARY_SECRET:SlJA8pvuSIgcPX1CoAagGE-qWyE}
+logging:
+  level:
+    io.management: DEBUG

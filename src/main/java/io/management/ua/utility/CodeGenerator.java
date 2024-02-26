@@ -1,12 +1,16 @@
 package io.management.ua.utility;
 
+import io.management.ua.annotations.Export;
+
 import java.util.Random;
 
 public class CodeGenerator {
+    @Export
     public static String generateCode() {
         return String.valueOf(new Random().nextInt((int) 10E3, (int) 10E4));
     }
 
+    @Export
     public static String generateCode(String pattern) {
         StringBuilder code = new StringBuilder();
 
