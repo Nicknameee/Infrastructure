@@ -105,7 +105,7 @@ public class NetworkService {
                         .ofByteArray(body.toByteArray()))
                 .build();
 
-        log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body.toByteArray());
+        log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body);
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
         log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body());

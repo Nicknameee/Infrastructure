@@ -6,6 +6,7 @@ import io.management.resources.mapper.ImageMapper;
 import io.management.resources.models.Image;
 import io.management.resources.repository.ImageRepository;
 import io.management.ua.annotations.Export;
+import io.management.ua.exceptions.NotFoundException;
 import io.management.ua.utility.UtilManager;
 import io.management.ua.utility.models.NetworkResponse;
 import io.management.ua.utility.network.NetworkService;
@@ -17,9 +18,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,14 +48,20 @@ public class ImageHostingService {
     private String secret;
 
     @Export
-    public Image uploadImage(MultipartFile file) {
+    public Image uploadImage(MultipartFile file, @Nullable String folder) {
+        log.debug("Incoming image uploading request, Cloudinary API, filename {}, folder {}", file.getOriginalFilename(), folder);
+
+        String publicId = UUID.randomUUID().toString();
+        log.debug("Image public Cloudinary ID generated {}", publicId);
+
         Map<String, String> headers = new HashMap<>();
         String bound = UUID.randomUUID().toString().replaceAll("-", "");
+
         headers.put(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE + ";boundary=" + bound);
 
         try {
             NetworkResponse networkResponse =
-                    networkService.performRequest(HttpMethod.POST, host + "/upload", headers, writeFormDataBody(file, bound));
+                    networkService.performRequest(HttpMethod.POST, host + "/upload", headers, writeFormDataBody(file, bound, publicId, folder));
 
             if (networkResponse.getHttpStatus() == HttpStatus.OK) {
                 CloudinaryUploadResponse response =
@@ -70,11 +79,28 @@ public class ImageHostingService {
     }
 
     private String generateSignature(String publicId, long timestamp) {
-        String dataToHash = String.format("public_id=%s&timestamp=%d%s", publicId, timestamp, secret);
-        return DigestUtils.sha256Hex(dataToHash);
+        return generateSignature(null, publicId, timestamp);
     }
 
-    private ByteArrayOutputStream writeFormDataBody(MultipartFile file, String bound) throws IOException {
+    private String generateSignature(String folder, String publicId, long timestamp) {
+        StringBuilder signature = new StringBuilder();
+
+        if (folder != null) {
+            signature.append("folder=").append(folder);
+        }
+
+        if (!signature.isEmpty()) {
+            signature.append("&");
+        }
+
+        signature.append("public_id=").append(publicId).append("&");
+        signature.append("timestamp=").append(timestamp);
+        signature.append(secret);
+
+        return DigestUtils.sha256Hex(signature.toString());
+    }
+
+    private ByteArrayOutputStream writeFormDataBody(MultipartFile file, String bound, String id, String folder) throws IOException {
         if (file == null || file.getOriginalFilename() == null) {
             throw new RuntimeException("Invalid file data passed");
         }
@@ -88,12 +114,12 @@ public class ImageHostingService {
 
             outputStream.write(String.format("--%s\r\n", bound).getBytes());
             outputStream.write("Content-Disposition: form-data; name=\"public_id\"\r\n\r\n".getBytes());
-            outputStream.write(file.getOriginalFilename().getBytes());
+            outputStream.write(id.getBytes());
             outputStream.write("\r\n".getBytes());
 
             outputStream.write(String.format("--%s\r\n", bound).getBytes());
             outputStream.write("Content-Disposition: form-data; name=\"signature\"\r\n\r\n".getBytes());
-            outputStream.write(generateSignature(file.getOriginalFilename(), timestamp).getBytes());
+            outputStream.write(generateSignature(folder, id, timestamp).getBytes());
             outputStream.write("\r\n".getBytes());
 
             outputStream.write(String.format("--%s\r\n", bound).getBytes());
@@ -105,6 +131,13 @@ public class ImageHostingService {
             outputStream.write("Content-Disposition: form-data; name=\"timestamp\"\r\n\r\n".getBytes());
             outputStream.write(String.valueOf(timestamp).getBytes());
             outputStream.write("\r\n".getBytes());
+
+            if (folder != null) {
+                outputStream.write(String.format("--%s\r\n", bound).getBytes());
+                outputStream.write("Content-Disposition: form-data; name=\"folder\"\r\n\r\n".getBytes());
+                outputStream.write(folder.getBytes());
+                outputStream.write("\r\n".getBytes());
+            }
 
             outputStream.write(String.format("--%s\r\n", bound).getBytes());
             outputStream.write("\r\n".getBytes());
@@ -146,14 +179,18 @@ public class ImageHostingService {
     }
 
     @Export
-    public boolean deleteImage(String name) {
+    public boolean deleteImage(String url) {
+        Image image = imageRepository.findImageByUrl(url).orElseThrow(() -> new NotFoundException("Image was not found for url {}", url));
+        String publicId = image.getPublicId();
+
+        log.debug("Request for destroying image at Cloudinary API with public ID {}", publicId);
         Map<String, String> headers = new HashMap<>();
         String bound = UUID.randomUUID().toString().replaceAll("-", "");
         headers.put(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE + ";boundary=" + bound);
 
         try {
             NetworkResponse networkResponse =
-                    networkService.performRequest(HttpMethod.POST, host + "/destroy", headers, writeFormDataBody(name, bound));
+                    networkService.performRequest(HttpMethod.POST, host + "/destroy", headers, writeFormDataBody(publicId, bound));
 
             if (networkResponse.getHttpStatus() == HttpStatus.OK) {
                 String response = UtilManager.objectMapper()
@@ -162,7 +199,7 @@ public class ImageHostingService {
                         .asText();
 
                 if (response.equalsIgnoreCase("OK")) {
-                    imageRepository.deleteById(name);
+                    imageRepository.deleteById(publicId);
 
                     return true;
                 } else {
@@ -178,10 +215,5 @@ public class ImageHostingService {
         }
 
         return false;
-    }
-
-    @Export
-    public String extractFileNameFromUrl(String url) {
-        return url.substring(url.lastIndexOf("/") + 1);
     }
 }
