@@ -208,13 +208,12 @@ public class ImageHostingService {
                         .get("result")
                         .asText();
 
+                log.debug("Cloudinary image destroying response \"{}\"", response);
                 if (response.equalsIgnoreCase("OK")) {
                     imageRepository.deleteById(publicId);
 
                     return true;
                 } else {
-                    log.debug("Cloudinary image destroying response {}", response);
-
                     return false;
                 }
 
@@ -227,7 +226,7 @@ public class ImageHostingService {
         return false;
     }
 
-    public void validateUploadingFile(MultipartFile file) {
+    private void validateUploadingFile(MultipartFile file) {
         if (file.isEmpty()) {
             log.error("File is empty {}", file.getOriginalFilename());
             throw new InvalidFileException("File is empty {}", file.getOriginalFilename());
