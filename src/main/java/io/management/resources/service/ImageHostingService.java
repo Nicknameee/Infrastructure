@@ -6,6 +6,7 @@ import io.management.resources.mapper.ImageMapper;
 import io.management.resources.models.Image;
 import io.management.resources.repository.ImageRepository;
 import io.management.ua.annotations.Export;
+import io.management.ua.exceptions.InvalidFileException;
 import io.management.ua.exceptions.NotFoundException;
 import io.management.ua.utility.UtilManager;
 import io.management.ua.utility.models.NetworkResponse;
@@ -40,6 +41,8 @@ public class ImageHostingService {
     private final NetworkService networkService;
     private final ImageMapper imageMapper;
 
+    @Value("${api.resources.images.size}")
+    private Long size;
     @Value("${api.resources.images.host}")
     private String host;
     @Value("${api.resources.images.key}")
@@ -50,6 +53,7 @@ public class ImageHostingService {
     @Export
     public Image uploadImage(MultipartFile file, @Nullable String folder) {
         log.debug("Incoming image uploading request, Cloudinary API, filename {}, folder {}", file.getOriginalFilename(), folder);
+        validateUploadingFile(file);
 
         String publicId = UUID.randomUUID().toString();
         log.debug("Image public Cloudinary ID generated {}", publicId);
@@ -215,5 +219,18 @@ public class ImageHostingService {
         }
 
         return false;
+    }
+
+    public void validateUploadingFile(MultipartFile file) {
+        if (file.isEmpty()) {
+            log.error("File is empty {}", file.getOriginalFilename());
+            throw new InvalidFileException("File is empty {}", file.getOriginalFilename());
+        }
+
+        long maxSize = size * 1024 * 1024;
+        if (file.getSize() > maxSize) {
+            log.error("File size {} exceeds maximum allowed size Cloudinary 25MB", file.getSize());
+            throw new InvalidFileException("File size {} exceeds maximum allowed size Cloudinary 25MB", file.getSize());
+        }
     }
 }

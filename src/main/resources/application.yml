@@ -30,6 +30,7 @@ spring:
 api:
   resources:
     images:
+      size: 25
       host: ${CLOUDINARY_HOST:https://api.cloudinary.com/v1_1/dqjeb0ob2/image}
       key: ${CLOUDINARY_KEY:474919738819372}
       secret: ${CLOUDINARY_SECRET:SlJA8pvuSIgcPX1CoAagGE-qWyE}
