@@ -46,7 +46,6 @@ public class NetworkService {
         return performRequest(httpMethod, url, headers, null);
     }
 
-    @Export
     public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
                                           @NotNull String url,
                                           @NotNull Map<String, String> headers,
@@ -64,52 +63,34 @@ public class NetworkService {
             headerList.add(value);
         });
 
-        HttpRequest httpRequest = HttpRequest.newBuilder(new URI(url))
-                .headers(headerList.toArray(new String[0]))
-                .method(httpMethod.name(), HttpRequest.BodyPublishers
-                        .ofString(UtilManager.objectMapper()
-                                .writeValueAsString(body)))
-                .build();
+        HttpRequest httpRequest;
+
+        if (body != null) {
+            if (body instanceof ByteArrayOutputStream) {
+                httpRequest = HttpRequest.newBuilder(new URI(url))
+                        .headers(headerList.toArray(new String[0]))
+                        .method(httpMethod.name(), HttpRequest.BodyPublishers
+                                .ofByteArray(((ByteArrayOutputStream) body).toByteArray()))
+                        .build();
+            } else {
+                httpRequest = HttpRequest.newBuilder(new URI(url))
+                        .headers(headerList.toArray(new String[0]))
+                        .method(httpMethod.name(), HttpRequest.BodyPublishers
+                                .ofString(UtilManager.objectMapper()
+                                        .writeValueAsString(body)))
+                        .build();
+            }
+        } else {
+            httpRequest = HttpRequest.newBuilder(new URI(url))
+                    .headers(headerList.toArray(new String[0]))
+                    .method(httpMethod.name(), HttpRequest.BodyPublishers.noBody())
+                    .build();
+        }
 
         log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body);
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body());
-
-        return NetworkResponse.builder()
-                .httpStatus(HttpStatus.valueOf(response.statusCode()))
-                .headers(response.headers())
-                .body(response.body())
-                .build();
-    }
-
-    public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
-                                          @NotNull String url,
-                                          @NotNull Map<String, String> headers,
-                                          @NotNull ByteArrayOutputStream body) throws URISyntaxException, IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.NEVER)
-                .connectTimeout(ChronoUnit.SECONDS.getDuration().multipliedBy(5))
-                .build();
-
-        addDefaultHeaders(headers);
-
-        List<String> headerList = new ArrayList<>();
-        headers.forEach((key, value) -> {
-            headerList.add(key);
-            headerList.add(value);
-        });
-
-        HttpRequest httpRequest = HttpRequest.newBuilder(new URI(url))
-                .headers(headerList.toArray(new String[0]))
-                .method(httpMethod.name(), HttpRequest.BodyPublishers
-                        .ofByteArray(body.toByteArray()))
-                .build();
-
-        log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body);
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body().substring(0, 100) + "...");
+        log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body().substring(0, Math.min(100, response.body().length())) + "...");
 
         return NetworkResponse.builder()
                 .httpStatus(HttpStatus.valueOf(response.statusCode()))
