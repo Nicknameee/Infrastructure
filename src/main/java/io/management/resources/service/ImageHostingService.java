@@ -6,6 +6,7 @@ import io.management.resources.mapper.ImageMapper;
 import io.management.resources.models.Image;
 import io.management.resources.repository.ImageRepository;
 import io.management.ua.annotations.Export;
+import io.management.ua.exceptions.DefaultException;
 import io.management.ua.exceptions.InvalidFileException;
 import io.management.ua.exceptions.NotFoundException;
 import io.management.ua.utility.UtilManager;
@@ -19,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,13 +73,19 @@ public class ImageHostingService {
                                 new TypeReference<>(){});
                 Image image = imageMapper.responseToImage(response);
                 return imageRepository.save(image);
+            } else {
+                String exceptionText = UtilManager.objectMapper().readTree((String) networkResponse.getBody())
+                                .get("result")
+                                .get("message")
+                                .asText();
+
+                log.error("Uploading request went rogue {}", exceptionText);
+                throw new DefaultException("Uploading request went rogue {}", exceptionText);
             }
         } catch (URISyntaxException | IOException | InterruptedException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     private String generateSignature(String publicId, long timestamp) {
@@ -184,7 +190,7 @@ public class ImageHostingService {
 
     @Export
     public boolean deleteImage(String url) {
-        Image image = imageRepository.findImageByUrl(url).orElseThrow(() -> new NotFoundException("Image was not found for url {}", url));
+        Image image = imageRepository.findImageBySecureUrl(url).orElseThrow(() -> new NotFoundException("Image was not found for url {}", url));
         String publicId = image.getPublicId();
 
         log.debug("Request for destroying image at Cloudinary API with public ID {}", publicId);
