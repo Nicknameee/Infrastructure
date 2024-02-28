@@ -21,6 +21,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +30,13 @@ import java.util.Map;
 public class NetworkService {
     @Export
     public NetworkResponse performRequest(@NotNull String url) throws URISyntaxException, IOException, InterruptedException {
-        return performRequest(HttpMethod.GET, url, Map.of(), null);
+        return performRequest(HttpMethod.GET, url, new HashMap<>(), null);
     }
 
     @Export
     public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
                                           @NotNull String url) throws URISyntaxException, IOException, InterruptedException {
-        return performRequest(httpMethod, url, Map.of(), null);
+        return performRequest(httpMethod, url, new HashMap<>(), null);
     }
 
     @Export
@@ -108,7 +109,7 @@ public class NetworkService {
         log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body);
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body());
+        log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body().substring(0, 100) + "...");
 
         return NetworkResponse.builder()
                 .httpStatus(HttpStatus.valueOf(response.statusCode()))
