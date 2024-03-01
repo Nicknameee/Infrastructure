@@ -6,6 +6,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 
 public record UserSecurityPermissions() {
+    public static final String vendorCreatePermission = "vendor::create";
+    public static final String vendorReadPermission = "vendor::read";
+    public static final String vendorUpdatePermission = "vendor::update";
+    public static final String vendorDeletePermission = "vendor::delete";
     public static final String supportCreatePermission = "support::create";
     public static final String supportReadPermission = "support::read";
     public static final String supportUpdatePermission = "support::update";
@@ -25,6 +29,13 @@ public record UserSecurityPermissions() {
     public static final String managerUpdatePermission = "manager::update";
     public static final String managerDeletePermission = "manager::delete";
 
+    public static Set<GrantedAuthority> getVendorAuthorities() {
+        return Set.of(
+                new SimpleGrantedAuthority(vendorCreatePermission),
+                new SimpleGrantedAuthority(vendorReadPermission),
+                new SimpleGrantedAuthority(vendorUpdatePermission),
+                new SimpleGrantedAuthority(vendorDeletePermission));
+    }
     public static Set<GrantedAuthority> getSupportAuthorities() {
         return Set.of(
                 new SimpleGrantedAuthority(supportCreatePermission),
@@ -33,6 +44,7 @@ public record UserSecurityPermissions() {
                 new SimpleGrantedAuthority(supportDeletePermission)
         );
     }
+
     public static Set<GrantedAuthority> getOperatorAuthorities() {
         return Set.of(
                 new SimpleGrantedAuthority(operatorCreatePermission),

@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Getter
 public enum UserSecurityRole {
+    ROLE_VENDOR(UserSecurityPermissions.getVendorAuthorities()),
     ROLE_SUPPORT(UserSecurityPermissions.getSupportAuthorities()),
     ROLE_OPERATOR(UserSecurityPermissions.getOperatorAuthorities()),
     ROLE_CUSTOMER(UserSecurityPermissions.getCustomerAuthorities()),
