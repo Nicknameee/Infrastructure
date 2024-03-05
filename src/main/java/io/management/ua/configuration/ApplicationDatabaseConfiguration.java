@@ -18,6 +18,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -52,9 +53,17 @@ public class ApplicationDatabaseConfiguration {
     }
 
     @Bean
+    @Primary
     @ConditionalOnBean(name = "databaseDataSourceProperties")
     public PlatformTransactionManager databaseTransactionManager(@Qualifier("databaseEntityManagerFactory") EntityManagerFactory factory) {
         return new JpaTransactionManager(factory);
+    }
+
+    @Bean
+    @Primary
+    @ConditionalOnBean(name = "databaseEntityManagerFactory")
+    public EntityManager databaseEntityManager(EntityManagerFactory databaseEntityManagerFactory) {
+        return databaseEntityManagerFactory.createEntityManager();
     }
 
     @Bean
