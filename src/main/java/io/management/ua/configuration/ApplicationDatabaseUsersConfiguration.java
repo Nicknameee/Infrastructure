@@ -46,7 +46,6 @@ public class ApplicationDatabaseUsersConfiguration {
                 .build();
     }
 
-    @Primary
     @Bean
     public PlatformTransactionManager usersTransactionManager(@Qualifier("usersEntityManagerFactory")
                                                                EntityManagerFactory factory) {
