@@ -60,7 +60,6 @@ public class ApplicationDatabaseConfiguration {
     }
 
     @Bean
-    @Primary
     @ConditionalOnBean(name = "databaseEntityManagerFactory")
     public EntityManager databaseEntityManager(EntityManagerFactory databaseEntityManagerFactory) {
         return databaseEntityManagerFactory.createEntityManager();
