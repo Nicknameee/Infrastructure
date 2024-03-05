@@ -6,8 +6,6 @@ import io.management.ua.utility.enums.WebSocketTopics;
 import io.management.ua.utility.models.UserSecurityRole;
 import io.management.ua.utility.models.UserSecurityStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/management")
 @Slf4j
-@PreAuthorize("hasRole(T(io.management.ua.utility.models.UserSecurityRole).ROLE_MANAGER)")
-@ConditionalOnProperty(prefix = "spring.application", name = "name", havingValue = "User")
 public class ManagerController {
     @GetMapping("/available/roles")
     public Response<?> getAvailableUserRoles() {
