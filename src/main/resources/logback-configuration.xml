@@ -10,11 +10,11 @@
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST:-localhost:5000}</destination>
         <encoder>
-            <pattern>%date{ISO8601_PATTERN} [${application}] [%-5level] [%thread] %logger{36} %msg %n</pattern>
+            <pattern>%date{ISO8601_PATTERN} [${application}] [%-5level] [%thread] %logger{36} %msg</pattern>
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="stdout"/>
         <appender-ref ref="logstash"/>
     </root>
