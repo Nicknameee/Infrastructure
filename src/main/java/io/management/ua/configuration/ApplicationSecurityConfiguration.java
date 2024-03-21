@@ -1,12 +1,14 @@
 package io.management.ua.configuration;
 
-import io.management.ua.configuration.entries.AuthenticationTokenBasedEntryPoint;
+import io.management.ua.configuration.entries.AuthenticationEntryPoint;
+import io.management.ua.configuration.filters.AuthorizationBasicRequestFilter;
 import io.management.ua.configuration.filters.AuthorizationTokenRequestFilter;
 import io.management.ua.configuration.filters.PreLogoutTokenBasedFilter;
 import io.management.ua.configuration.handlers.AuthenticationLogoutSecurityHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -20,12 +22,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -34,14 +36,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @RequiredArgsConstructor
 public class ApplicationSecurityConfiguration {
-    private final AuthenticationTokenBasedEntryPoint authenticationTokenBasedEntryPoint;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AuthenticationLogoutSecurityHandler authenticationLogoutSecurityHandler;
     private final UserDetailsService userDetailsService;
     private final AuthorizationTokenRequestFilter authorizationTokenRequestFilter;
+    private final AuthorizationBasicRequestFilter authorizationBasicRequestFilter;
     private final PreLogoutTokenBasedFilter preLogoutTokenBasedFilter;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    @Order(1)
+    protected SecurityFilterChain configureAPIFilterChain(HttpSecurity http) throws Exception {
+        http
+                .requestMatchers()
+                .antMatchers("/api/**");
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -54,12 +62,9 @@ public class ApplicationSecurityConfiguration {
                 .addFilterBefore(preLogoutTokenBasedFilter, LogoutFilter.class);
         http
                 .authorizeRequests()
-                .antMatchers("/ws/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
-                .antMatchers("/util/**", "/**/allowed").permitAll()
-                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .anyRequest()
-                .authenticated()
+                .denyAll()
                 .and()
                 .logout()
                 .logoutSuccessHandler(authenticationLogoutSecurityHandler)
@@ -69,7 +74,60 @@ public class ApplicationSecurityConfiguration {
                 .deleteCookies("JSESSIONID", AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY);
         http
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationTokenBasedEntryPoint);
+                .authenticationEntryPoint(authenticationEntryPoint);
+        return http.build();
+    }
+
+    @Bean
+    @Order(3)
+    public SecurityFilterChain configurePublicFilterChain(HttpSecurity http) throws Exception {
+        http
+                .requestMatchers()
+                .antMatchers("/ws/**", "/util/**", "/**/allowed")
+                .antMatchers(HttpMethod.POST, "/login", "/logout");
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable);
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
+                .antMatchers("/ws/**", "/util/**", "/**/allowed").permitAll()
+                .anyRequest()
+                .denyAll();
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint);
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(5)
+    public SecurityFilterChain httpBasicInternalFilterChain(HttpSecurity http) throws Exception {
+        http
+                .requestMatchers()
+                .antMatchers("/actuator/**");
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable);
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http
+                .httpBasic();
+        http
+                .addFilterBefore(authorizationBasicRequestFilter, BasicAuthenticationFilter.class);
+        http
+                .authorizeRequests()
+                .antMatchers("/actuator/**").hasAnyRole("MONITOR", "DISCOVERY", "USER")
+                .anyRequest()
+                .denyAll();
+
         return http.build();
     }
 
@@ -79,6 +137,7 @@ public class ApplicationSecurityConfiguration {
                 .ignoring()
                 .antMatchers();
     }
+
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
@@ -88,20 +147,15 @@ public class ApplicationSecurityConfiguration {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
+                .passwordEncoder(passwordEncoder)
                 .and()
                 .build();
     }
 
     @Bean
-    protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(7);
-    }
-
-    @Bean
     protected DaoAuthenticationProvider repositoryAuthenticationProvider() {
         DaoAuthenticationProvider repositoryAuthenticationProvider = new DaoAuthenticationProvider();
-        repositoryAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        repositoryAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         repositoryAuthenticationProvider.setUserDetailsService(userDetailsService);
         return repositoryAuthenticationProvider;
     }

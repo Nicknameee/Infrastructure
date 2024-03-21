@@ -6,6 +6,7 @@ import io.management.ua.utility.enums.WebSocketTopics;
 import io.management.ua.utility.models.UserSecurityRole;
 import io.management.ua.utility.models.UserSecurityStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/management")
 @Slf4j
+@ConditionalOnProperty(name = "server.port", havingValue = "8888")
 public class ManagerController {
     @GetMapping("/available/roles")
     public Response<?> getAvailableUserRoles() {

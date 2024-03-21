@@ -7,6 +7,7 @@ import io.management.users.models.UserDetailsModel;
 import io.management.users.repository.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,11 +15,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
+@Component("userDetailsAPIService")
 @RequiredArgsConstructor
 @Slf4j
+@Primary
 public class UserDetailsImplementationService implements UserDetailsService {
     private final UserDetailsRepository userDetailsRepository;
+
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         return userDetailsRepository.findUserDetailsByLogin(login)
