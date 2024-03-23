@@ -25,6 +25,7 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class ValueAnnotationProcessor implements BeanPostProcessor {
     private final Environment environment;
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, @NonNull String beanName) throws BeansException {
         Field[] fields = bean.getClass().getDeclaredFields();

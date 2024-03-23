@@ -13,7 +13,7 @@ public class ResponseSerializer extends JsonSerializer<Response<?>> {
 
         if (value.getHttpStatus().isError()) {
             gen.writeFieldName("exception");
-            gen.writeString(value.getException());
+            gen.writeObject(value.getException());
         }
 
         if (value.getData() != null) {

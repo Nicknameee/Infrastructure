@@ -6,6 +6,7 @@ import io.management.ua.configuration.filters.AuthorizationTokenRequestFilter;
 import io.management.ua.configuration.filters.PreLogoutTokenBasedFilter;
 import io.management.ua.configuration.handlers.AuthenticationLogoutSecurityHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -43,6 +44,9 @@ public class ApplicationSecurityConfiguration {
     private final AuthorizationBasicRequestFilter authorizationBasicRequestFilter;
     private final PreLogoutTokenBasedFilter preLogoutTokenBasedFilter;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${spring.security.web.debug.enabled:false}")
+    private boolean debugEnabled;
 
     @Bean
     @Order(1)
@@ -133,7 +137,7 @@ public class ApplicationSecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.debug(true)
+        return (web) -> web.debug(debugEnabled)
                 .ignoring()
                 .antMatchers();
     }

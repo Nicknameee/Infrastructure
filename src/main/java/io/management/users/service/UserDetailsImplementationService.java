@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component("userDetailsAPIService")
+@Component
 @RequiredArgsConstructor
 @Slf4j
 @Primary

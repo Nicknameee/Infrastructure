@@ -1,5 +1,6 @@
 package io.management.ua.utility.service;
 
+import io.management.ua.annotations.Export;
 import io.management.ua.utility.UtilManager;
 import io.management.ua.utility.models.WebSocketMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class WebSocketService {
         this.simpMessagingTemplate.setSendTimeout(1000L);
     }
 
+    @Export
     public void sendMessage(String topic, Object payload) {
         WebSocketMessage<Object> webSocketMessage = new WebSocketMessage<>();
         webSocketMessage.setData(payload);

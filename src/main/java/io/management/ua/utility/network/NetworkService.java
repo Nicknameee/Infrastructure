@@ -46,6 +46,7 @@ public class NetworkService {
         return performRequest(httpMethod, url, headers, null);
     }
 
+    @Export
     public NetworkResponse performRequest(@NotNull HttpMethod httpMethod,
                                           @NotNull String url,
                                           @NotNull Map<String, String> headers,
