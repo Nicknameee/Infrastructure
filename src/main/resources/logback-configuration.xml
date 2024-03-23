@@ -10,7 +10,7 @@
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGBACK_LOGSTASH_DESTINATION:-localhost:5000}</destination>
         <encoder>
-            <pattern>%date{ISO8601_PATTERN} ${application} [%-5level] [%thread] %logger{36} %msg</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${application} %-5level [%thread] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

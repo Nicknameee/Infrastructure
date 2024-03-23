@@ -67,3 +67,4 @@ api:
 logging:
   level:
     io.management: DEBUG
+    root: INFO
