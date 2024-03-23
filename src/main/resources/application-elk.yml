@@ -1,5 +1,4 @@
 logging:
   level:
     io.management: DEBUG
-    root: INFO
-  config: classpath:logback-configuration.xml
+  config: ${LOGGING_CONFIG:classpath:logback-configuration.xml}
