@@ -73,6 +73,12 @@ public class NetworkService {
                         .method(httpMethod.name(), HttpRequest.BodyPublishers
                                 .ofByteArray(((ByteArrayOutputStream) body).toByteArray()))
                         .build();
+            } else if (body instanceof String) {
+                httpRequest = HttpRequest.newBuilder(new URI(url))
+                        .headers(headerList.toArray(new String[0]))
+                        .method(httpMethod.name(), HttpRequest.BodyPublishers
+                                .ofString((String) body))
+                        .build();
             } else {
                 httpRequest = HttpRequest.newBuilder(new URI(url))
                         .headers(headerList.toArray(new String[0]))
