@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,11 +75,20 @@ public class NetworkService {
                                 .ofByteArray(((ByteArrayOutputStream) body).toByteArray()))
                         .build();
             } else if (body instanceof String) {
-                httpRequest = HttpRequest.newBuilder(new URI(url))
-                        .headers(headerList.toArray(new String[0]))
-                        .method(httpMethod.name(), HttpRequest.BodyPublishers
-                                .ofString((String) body))
-                        .build();
+                if (headers.get(HttpHeaders.CONTENT_TYPE).equals(MediaType.APPLICATION_XML_VALUE)) {
+                    httpRequest = HttpRequest.newBuilder(new URI(url))
+                            .headers(headerList.toArray(new String[0]))
+                            .method(httpMethod.name(), HttpRequest.BodyPublishers
+                                    .ofByteArray(((String) body).getBytes(StandardCharsets.UTF_8)))
+                            .build();
+
+                } else {
+                    httpRequest = HttpRequest.newBuilder(new URI(url))
+                            .headers(headerList.toArray(new String[0]))
+                            .method(httpMethod.name(), HttpRequest.BodyPublishers
+                                    .ofString((String) body))
+                            .build();
+                }
             } else {
                 httpRequest = HttpRequest.newBuilder(new URI(url))
                         .headers(headerList.toArray(new String[0]))
