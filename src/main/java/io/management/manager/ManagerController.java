@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/management")
 @Slf4j
-@ConditionalOnProperty(name = "server.port", havingValue = "8888")
+@ConditionalOnProperty(name = "server.port", havingValue = "9001")
 public class ManagerController {
     @GetMapping("/available/roles")
     public Response<?> getAvailableUserRoles() {
