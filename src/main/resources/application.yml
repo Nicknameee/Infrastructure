@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
   application:
-    name: Infrastructure
+    name: ${SPRING_APPLICATION_NAME:Infrastructure}
 
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:default, native, dev, elk}
+    active: ${SPRING_PROFILES_ACTIVE:default, native, dev}
 
   security:
     user:
