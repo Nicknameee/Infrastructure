@@ -53,7 +53,7 @@ public class ApplicationSecurityConfiguration {
     protected SecurityFilterChain configureAPIFilterChain(HttpSecurity http) throws Exception {
         http
                 .requestMatchers()
-                .antMatchers("/api/**", "/**/allowed");
+                .antMatchers("/api/**", "/**/allowed", "/logout");
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -89,7 +89,7 @@ public class ApplicationSecurityConfiguration {
         http
                 .requestMatchers()
                 .antMatchers("/ws/**", "/util/**")
-                .antMatchers(HttpMethod.POST, "/login", "/logout");
+                .antMatchers(HttpMethod.POST, "/login");
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -99,7 +99,7 @@ public class ApplicationSecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers("/ws/**", "/util/**", "/**/allowed").permitAll()
                 .anyRequest()
                 .denyAll();
