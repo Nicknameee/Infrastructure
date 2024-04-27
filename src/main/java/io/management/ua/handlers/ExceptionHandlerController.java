@@ -17,11 +17,11 @@ public class ExceptionHandlerController {
     @ExceptionHandler(Exception.class)
     public Response<?> handleApplicationExceptions(Exception e) {
         if (e instanceof GlobalException exception) {
-            return Response.of(exception.getHttpStatus()).data(exception);
+            return Response.of(exception.getHttpStatus()).exception(exception);
         } else if (e instanceof ConstraintViolationException exception) {
             return Response
                     .of(HttpStatus.BAD_REQUEST)
-                    .data(GlobalException
+                    .exception(GlobalException
                             .builder()
                             .exceptionTime(TimeUtil.getCurrentDateTime())
                             .httpStatus(HttpStatus.BAD_REQUEST)
@@ -34,11 +34,12 @@ public class ExceptionHandlerController {
                                             constraintViolation.getMessage())
                                     )
                                     .toList()
-                                    .toString()));
+                                    .toString())
+                            .build());
         } else if (e instanceof MethodArgumentNotValidException exception) {
             return Response
                     .of(HttpStatus.BAD_REQUEST)
-                    .data(GlobalException
+                    .exception(GlobalException
                             .builder()
                             .exceptionTime(TimeUtil.getCurrentDateTime())
                             .httpStatus(HttpStatus.BAD_REQUEST)
@@ -49,9 +50,13 @@ public class ExceptionHandlerController {
                                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                                     .filter(Objects::nonNull)
                                     .toList()
-                                    .toString()));
+                                    .toString())
+                            .build());
         }
 
-        return Response.of(HttpStatus.INTERNAL_SERVER_ERROR).data(e.getMessage());
+        return Response.of(HttpStatus.INTERNAL_SERVER_ERROR).exception(GlobalException
+                .builder()
+                .exception(e.getMessage())
+                .build());
     }
 }
