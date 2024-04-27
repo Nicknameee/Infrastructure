@@ -54,8 +54,11 @@ public class ExceptionHandlerController {
                             .build());
         }
 
-        return Response.of(HttpStatus.INTERNAL_SERVER_ERROR).exception(GlobalException
+        return Response.of(HttpStatus.INTERNAL_SERVER_ERROR)
+                .exception(GlobalException
                 .builder()
+                .exceptionTime(TimeUtil.getCurrentDateTime())
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .exception(e.getMessage())
                 .build());
     }
