@@ -51,4 +51,10 @@ public class UserDetailsImplementationService implements UserDetailsService {
 
         return null;
     }
+
+    @Export
+    @Nullable
+    public UserDetailsModel getUserById(Long userId) {
+        return userDetailsRepository.findById(userId).orElse(null);
+    }
 }
