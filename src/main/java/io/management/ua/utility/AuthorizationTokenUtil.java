@@ -33,7 +33,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class AuthorizationTokenUtil {
     private final BlacklistedTokenRepository blacklistedTokenRepository;
-    @Value("${token.duration:3600}")
+    @Value("${token.duration:86400}")
     private int tokenValidityDuration;
     @Value("${token.secret}")
     private String tokenSecret;
