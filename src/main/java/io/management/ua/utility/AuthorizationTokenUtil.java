@@ -115,8 +115,8 @@ public class AuthorizationTokenUtil {
         String address = (String) claims.get("IP");
 
         return username.equals(userDetails.getUsername())
-                && userAgent.equals(request.getHeader("User-Agent"))
-                && address.equals(request.getRemoteAddr())
+//                && userAgent.equals(request.getHeader("User-Agent"))
+//                && address.equals(request.getRemoteAddr())
                 && checkTokenExpiration(token)
                 && !checkTokenBlacklist(token);
     }
