@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -39,6 +40,12 @@ public class UserDetailsImplementationService implements UserDetailsService {
     }
 
     @Export
+    @Nullable
+    public List<UserDetailsModel> getUsersByRole(UserSecurityRole userSecurityRole) {
+        return userDetailsRepository.findByRole(userSecurityRole);
+    }
+    @Export
+
     @Nullable
     public static UserDetailsModel getCurrentlyAuthenticatedUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();

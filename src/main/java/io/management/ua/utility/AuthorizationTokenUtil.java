@@ -107,16 +107,10 @@ public class AuthorizationTokenUtil {
     }
 
     public boolean validateToken(String token,
-                                 @NonNull UserDetails userDetails,
-                                 @NonNull HttpServletRequest request) {
+                                 @NonNull UserDetails userDetails) {
         String username = getUsernameFromToken(token);
-        Claims claims = getAllClaimsFromToken(token);
-        String userAgent = (String) claims.get("User-Agent");
-        String address = (String) claims.get("IP");
 
         return username.equals(userDetails.getUsername())
-//                && userAgent.equals(request.getHeader("User-Agent"))
-//                && address.equals(request.getRemoteAddr())
                 && checkTokenExpiration(token)
                 && !checkTokenBlacklist(token);
     }

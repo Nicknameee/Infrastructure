@@ -39,7 +39,7 @@ public class PreLogoutTokenBasedFilter extends GenericFilterBean {
                 String username = authorizationTokenUtil.getUsernameFromToken(authorizationToken);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                if (authorizationToken.isEmpty() || !authorizationTokenUtil.validateToken(authorizationToken, userDetails, request)) {
+                if (authorizationToken.isEmpty() || !authorizationTokenUtil.validateToken(authorizationToken, userDetails)) {
                     processNonAuthenticatedExceptionResponse((HttpServletResponse) servletResponse);
                 }
             } else {

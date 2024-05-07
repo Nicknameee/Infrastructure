@@ -41,7 +41,7 @@ public class AuthenticationLogoutSecurityHandler implements LogoutSuccessHandler
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (!authorizationToken.isEmpty()
-                        && authorizationTokenUtil.validateToken(authorizationToken, userDetails, request)) {
+                        && authorizationTokenUtil.validateToken(authorizationToken, userDetails)) {
                     authorizationTokenUtil.blacklistToken(authorizationToken);
 
                     logoutEventEventPublisher.publishEvent(new LogoutEvent(userDetails));
