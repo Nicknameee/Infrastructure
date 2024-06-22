@@ -80,6 +80,7 @@ public class ImageHostingService {
                                 .asText();
 
                 log.error("Uploading request went rogue {}", exceptionText);
+
                 throw new DefaultException("Uploading request went rogue {}", exceptionText);
             }
         } catch (URISyntaxException | IOException | InterruptedException e) {
@@ -233,6 +234,7 @@ public class ImageHostingService {
         }
 
         long maxSize = size * 1024 * 1024;
+
         if (file.getSize() > maxSize) {
             log.error("File size {} exceeds maximum allowed size Cloudinary 25MB", file.getSize());
             throw new InvalidFileException("File size {} exceeds maximum allowed size Cloudinary 25MB", file.getSize());

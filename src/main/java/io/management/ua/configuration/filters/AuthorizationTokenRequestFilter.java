@@ -53,6 +53,7 @@ public class AuthorizationTokenRequestFilter extends OncePerRequestFilter {
                 logger.error(e.getMessage());
             }
         }
+
         chain.doFilter(request, response);
     }
 }

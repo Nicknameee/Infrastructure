@@ -81,7 +81,6 @@ public class NetworkService {
                             .method(httpMethod.name(), HttpRequest.BodyPublishers
                                     .ofByteArray(((String) body).getBytes(StandardCharsets.UTF_8)))
                             .build();
-
                 } else {
                     httpRequest = HttpRequest.newBuilder(new URI(url))
                             .headers(headerList.toArray(new String[0]))
@@ -105,6 +104,7 @@ public class NetworkService {
         }
 
         log.debug("Performing HTTP {} request, url {}, headers {}, body {}", httpMethod, url, headers, body);
+
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
         log.debug("Response with status {}, headers {}, body {}", HttpStatus.valueOf(response.statusCode()), response.headers(), response.body().substring(0, Math.min(100, response.body().length())) + "...");

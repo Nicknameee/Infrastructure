@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Clock;
@@ -52,7 +53,7 @@ public class AuthorizationTokenUtil {
         });
     }
 
-    public void blacklistToken(String token) {
+    public void blacklistToken(@NotNull String token) {
         String username = getUsernameFromToken(token);
         BlacklistedToken blacklistedToken = new BlacklistedToken();
         blacklistedToken.setToken(token);
@@ -61,15 +62,15 @@ public class AuthorizationTokenUtil {
         blacklistedTokenRepository.save(blacklistedToken);
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getUsernameFromToken(@NotNull String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    public Date getExpirationDateFromToken(String token) {
+    public Date getExpirationDateFromToken(@NotNull String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    public <T> T getClaimFromToken(@NotNull String token, Function<Claims, T> claimsResolver) {
         Claims claims = getAllClaimsFromToken(token);
 
         return claimsResolver.apply(claims);
@@ -106,7 +107,7 @@ public class AuthorizationTokenUtil {
                            .compact();
     }
 
-    public boolean validateToken(String token,
+    public boolean validateToken(@NotNull String token,
                                  @NonNull UserDetails userDetails) {
         String username = getUsernameFromToken(token);
 

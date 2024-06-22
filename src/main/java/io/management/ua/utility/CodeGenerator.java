@@ -40,8 +40,8 @@ public class CodeGenerator {
 
     @Export
     public static byte[] generateQRCode(String qrCodeContent) {
-        int width = 300;
-        int height = 300;
+        int width = 500;
+        int height = 500;
         String fileType = "png";
 
         try {

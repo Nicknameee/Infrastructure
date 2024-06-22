@@ -33,6 +33,7 @@ public class UserDetailsImplementationService implements UserDetailsService {
     }
 
     @Export
+    @Nullable
     public UserSecurityRole getUserRoleById(Long id) {
         Optional<UserDetailsModel> userDetailsModel = userDetailsRepository.findById(id);
 
@@ -44,8 +45,8 @@ public class UserDetailsImplementationService implements UserDetailsService {
     public List<UserDetailsModel> getUsersByRole(UserSecurityRole userSecurityRole) {
         return userDetailsRepository.findByRole(userSecurityRole);
     }
-    @Export
 
+    @Export
     @Nullable
     public static UserDetailsModel getCurrentlyAuthenticatedUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
